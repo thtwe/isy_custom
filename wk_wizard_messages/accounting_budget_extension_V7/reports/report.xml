@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="report_budget_opex" model="ir.actions.report">
+        <field name="name">Opex Export</field>
+        <field name="model">budget.opex</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">accounting_budget_extension_V7.budget_opex_report</field>
+        <field name="report_file">accounting_budget_extension_V7.budget_opex_report</field>
+        <!-- <field name="paperformat" ref="accounting_budget_extension_V7.paperformat_headerspacing"/> -->
+    </record>
+
+    <record id="report_budget_capex" model="ir.actions.report">
+        <field name="name">Capex Export</field>
+        <field name="model">budget.capex</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">accounting_budget_extension_V7.budget_capex_report</field>
+        <field name="report_file">accounting_budget_extension_V7.budget_capex_report</field>
+        <!-- <field name="paperformat" ref="accounting_budget_extension_V7.paperformat_headerspacing"/> -->
+    </record>
+</odoo>

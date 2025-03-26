@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+     <record id="capex_report_wizard_form" model="ir.ui.view">
+         <field name="name">capex.report.wizard.form</field>
+         <field name="model">capex.report.wizard</field>
+         <field name="arch" type="xml">
+            <form string="Capex Report">
+                <footer>
+                    <button name="get_report" string="Print" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+         </field>
+     </record>
+
+    <record id="capex_report_wizard" model="ir.actions.act_window">
+        <field name="name">Capex Report</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">capex.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="capex_report_wizard_form"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="capex_report_wizard_menu" name="Capex Report" action="capex_report_wizard" parent="accounting_budget_extension_V7.menu_capex" sequence="2" />
+
+</odoo>

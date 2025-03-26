@@ -1,0 +1,1070 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <menuitem id="menu_opex" name="Opex" parent="accounting_budget_extension_V7.menu_financial_report_root" sequence="3" />
+        <menuitem id="menu_opex_line" name="Opex Line" parent="accounting_budget_extension_V7.menu_opex" sequence="2" />
+
+        <record id="opex_view_tree" model="ir.ui.view">
+            <field name="name">budget.opex.tree</field>
+            <field name="model">budget.opex</field>
+            <field name="arch" type="xml">
+                <tree string="Opex Tree" default_order="sequence">
+                    <field name="sequence" invisible="1"/>
+                    <field name="name" />
+                    <field name="jul_total" sum="Total" widget="integer"/>
+                    <field name="aug_total" sum="Total" widget="integer"/>
+                    <field name="sep_total" sum="Total" widget="integer"/>
+                    <field name="oct_total" sum="Total" widget="integer"/>
+                    <field name="nov_total" sum="Total" widget="integer"/>
+                    <field name="dec_total" sum="Total" widget="integer"/>
+                    <field name="jan_total" sum="Total" widget="integer"/>
+                    <field name="feb_total" sum="Total" widget="integer"/>
+                    <field name="mar_total" sum="Total" widget="integer"/>
+                    <field name="apr_total" sum="Total" widget="integer"/>
+                    <field name="may_total" sum="Total" widget="integer"/>
+                    <field name="jun_total" sum="Total" widget="integer"/>
+                    <field name="actual_total" sum="Acutal Total" widget="integer" />
+                    <field name="budget_total" sum="Budget Total" widget="integer" />
+                    <field name="percentage" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="opex_view_form" model="ir.ui.view">
+            <field name="name">budget.opex.form</field>
+            <field name="model">budget.opex</field>
+            <field name="arch" type="xml">
+                <form string="Opex Form">
+                    <sheet>
+                        <h1>
+                            <field name="name" required="1" placeholder="e.g. Application Fees" />
+                        </h1>
+                        <group>
+                            <group name="budget_informations">
+                                <field name="budget_total" widget="integer" />
+                                <field name="actual_total"  widget="integer" />
+                                <field name="percentage" />
+                            </group>
+                            <group name="misc">
+                                <field name="sequence" />
+                                <field name="opex_type_id" widget="selection" />
+                                <field name="from_date"/>
+                                <field name="to_date" />
+                            </group>
+                            <group name="total_left">
+                                <field name="jul_total" widget="integer"/>
+                                <field name="aug_total" widget="integer"/>
+                                <field name="sep_total" widget="integer"/>
+                                <field name="oct_total" widget="integer"/>
+                                <field name="nov_total" widget="integer"/>
+                                <field name="dec_total" widget="integer"/>
+                            </group>
+                            <group name="total_right">
+                                <field name="jan_total" widget="integer"/>
+                                <field name="feb_total" widget="integer"/>
+                                <field name="mar_total" widget="integer"/>
+                                <field name="apr_total" widget="integer"/>
+                                <field name="may_total" widget="integer"/>
+                                <field name="jun_total" widget="integer"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="July" name="opex_july_lines">
+                                <field name="jul_line_ids" nolable="1">
+                                    <tree string="July" editable="bottom">
+                                        <field name="account_id"/>
+                                        <field name="budget_amount"/>
+                                        <field name="actual_amount"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="August" name="opex_august_lines">
+                                <field name="aug_line_ids" nolable="1">
+                                    <tree string="August" editable="bottom">
+                                        <field name="account_id"/>
+                                        <field name="budget_amount"/>
+                                        <field name="actual_amount"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="September" name="opex_september_lines">
+                                <field name="sep_line_ids" nolable="1">
+                                    <tree string="Septembere" editable="bottom">
+                                        <field name="account_id"/>
+                                        <field name="budget_amount"/>
+                                        <field name="actual_amount"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="October" name="opex_october_lines">
+                                <field name="oct_line_ids" nolable="1">
+                                    <tree string="October" editable="bottom">
+                                        <field name="account_id"/>
+                                        <field name="budget_amount"/>
+                                        <field name="actual_amount"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="November" name="opex_november_lines">
+                                <field name="nov_line_ids" nolable="1">
+                                    <tree string="November" editable="bottom">
+                                        <field name="account_id"/>
+                                        <field name="budget_amount"/>
+                                        <field name="actual_amount"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="December" name="opex_december_lines">
+                                <field name="dec_line_ids" nolable="1">
+                                    <tree string="December" editable="bottom">
+                                        <field name="account_id"/>
+                                        <field name="budget_amount"/>
+                                        <field name="actual_amount"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="January" name="opex_january_lines">
+                                <field name="jan_line_ids" nolable="1">
+                                    <tree string="January" editable="bottom">
+                                        <field name="account_id"/>
+                                        <field name="budget_amount"/>
+                                        <field name="actual_amount"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="February" name="opex_february_lines">
+                                <field name="feb_line_ids" nolable="1">
+                                    <tree string="February" editable="bottom">
+                                        <field name="account_id"/>
+                                        <field name="budget_amount"/>
+                                        <field name="actual_amount"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="March" name="opex_march_lines">
+                                <field name="mar_line_ids" nolable="1">
+                                    <tree string="March" editable="bottom">
+                                        <field name="account_id"/>
+                                        <field name="budget_amount"/>
+                                        <field name="actual_amount"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="April" name="opex_april_lines">
+                                <field name="apr_line_ids" nolable="1">
+                                    <tree string="April" editable="bottom">
+                                        <field name="account_id"/>
+                                        <field name="budget_amount"/>
+                                        <field name="actual_amount"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="May" name="opex_may_lines">
+                                <field name="may_line_ids" nolable="1">
+                                    <tree string="May" editable="bottom">
+                                        <field name="account_id"/>
+                                        <field name="budget_amount"/>
+                                        <field name="actual_amount"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="June" name="opex_june_lines">
+                                <field name="jun_line_ids" nolable="1">
+                                    <tree string="June" editable="bottom">
+                                        <field name="account_id"/>
+                                        <field name="budget_amount"/>
+                                        <field name="actual_amount"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" />
+                        <field name="message_ids" widget="mail_thread" />
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="opex_view_search" model="ir.ui.view">
+            <field name="name">budget.opex.search</field>
+            <field name="model">budget.opex</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name" />
+                    <group string="Group By">
+                        <filter name="group_by_opex_type" string="Opex" context="{'group_by': 'opex_type_id'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="opex_action" model="ir.actions.act_window">
+            <field name="name">Opex</field>
+            <field name="res_model">budget.opex</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context" eval="{'search_default_group_by_opex_type': 1}" />
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create an Opex!</p>
+            </field>
+        </record>
+
+        <menuitem id="opex_menu" name="Opex" parent="accounting_budget_extension_V7.menu_opex" action="opex_action" sequence="1" />
+
+       
+
+        <!-- Opex July Line -->
+        <record id="opex_july_view_tree" model="ir.ui.view">
+            <field name="name">budget.opex.july.tree</field>
+            <field name="model">opex.july.line</field>
+            <field name="arch" type="xml">
+                <tree string="Opex July Tree">
+                    <field name="account_id" />
+                    <field name="opex_id"/>
+                    <field name="budget_amount" sum="Total" />
+                    <field name="actual_amount" sum="Total" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="opex_july_view_form" model="ir.ui.view">
+            <field name="name">budget.opex.july.form</field>
+            <field name="model">opex.july.line</field>
+            <field name="arch" type="xml">
+                <form string="Opex July Form">
+                    <sheet>
+                        <group>
+                            <group name="budget_informations">
+                                <field name="account_id" required="1"/>
+                                <field name="budget_id"/>
+                                <field name="opex_id"/>
+                            </group>
+                            <group name="total_left">
+                                <field name="from_date"/>
+                                <field name="to_date"/>
+                            </group>
+                            <group name="misc">
+                                <field name="budget_amount" />
+                                <field name="actual_amount" />
+                            </group>
+                            <group name="total_right">
+                                <field name="type_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" />
+                        <field name="message_ids" widget="mail_thread" />
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="opex_july_view_search" model="ir.ui.view">
+            <field name="name">budget.opex.july.search</field>
+            <field name="model">opex.july.line</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="account_id" />
+                    <group string="Group By">
+                        <filter name="group_by_opex" string="Opex" context="{'group_by': 'opex_id'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="opex_july_action" model="ir.actions.act_window">
+            <field name="name">Opex July</field>
+            <field name="res_model">opex.july.line</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create a Opex July Line!</p>
+            </field>
+        </record>
+
+        <menuitem id="opex_july_menu" name="Opex July" parent="accounting_budget_extension_V7.menu_opex_line" action="opex_july_action" sequence="1" />
+
+        <!-- Opex August Line -->
+        <record id="opex_august_view_tree" model="ir.ui.view">
+            <field name="name">budget.opex.august.tree</field>
+            <field name="model">opex.august.line</field>
+            <field name="arch" type="xml">
+                <tree string="Opex August Tree">
+                    <field name="account_id" />
+                    <field name="opex_id"/>
+                    <field name="budget_amount" sum="Total" />
+                    <field name="actual_amount" sum="Total" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="opex_august_view_form" model="ir.ui.view">
+            <field name="name">budget.opex.august.form</field>
+            <field name="model">opex.august.line</field>
+            <field name="arch" type="xml">
+                <form string="Opex August Form">
+                    <sheet>
+                        <group>
+                            <group name="budget_informations">
+                                <field name="account_id" required="1"/>
+                                <field name="budget_id"/>
+                                <field name="opex_id"/>
+                            </group>
+                            <group name="total_left">
+                                <field name="from_date"/>
+                                <field name="to_date"/>
+                            </group>
+                            <group name="misc">
+                                <field name="budget_amount" />
+                                <field name="actual_amount" />
+                            </group>
+                            <group name="total_right">
+                                <field name="type_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" />
+                        <field name="message_ids" widget="mail_thread" />
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="opex_august_view_search" model="ir.ui.view">
+            <field name="name">budget.opex.august.search</field>
+            <field name="model">opex.august.line</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="account_id" />
+                    <group string="Group By">
+                        <filter name="group_by_opex" string="Opex" context="{'group_by': 'opex_id'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="opex_august_action" model="ir.actions.act_window">
+            <field name="name">Opex August</field>
+            <field name="res_model">opex.august.line</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create a Opex August Line!</p>
+            </field>
+        </record>
+
+        <menuitem id="opex_august_menu" name="Opex August" parent="accounting_budget_extension_V7.menu_opex_line" action="opex_august_action" sequence="2" />
+
+        <!-- Opex September Line -->
+        <record id="opex_september_view_tree" model="ir.ui.view">
+            <field name="name">budget.opex.september.tree</field>
+            <field name="model">opex.september.line</field>
+            <field name="arch" type="xml">
+                <tree string="Opex September Tree">
+                    <field name="account_id" />
+                    <field name="opex_id"/>
+                    <field name="budget_amount" sum="Total" />
+                    <field name="actual_amount" sum="Total" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="opex_september_view_form" model="ir.ui.view">
+            <field name="name">budget.opex.september.form</field>
+            <field name="model">opex.september.line</field>
+            <field name="arch" type="xml">
+                <form string="Opex September Form">
+                    <sheet>
+                        <group>
+                            <group name="budget_informations">
+                                <field name="account_id" required="1"/>
+                                <field name="budget_id"/>
+                                <field name="opex_id"/>
+                            </group>
+                            <group name="total_left">
+                                <field name="from_date"/>
+                                <field name="to_date"/>
+                            </group>
+                            <group name="misc">
+                                <field name="budget_amount" />
+                                <field name="actual_amount" />
+                            </group>
+                            <group name="total_right">
+                                <field name="type_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" />
+                        <field name="message_ids" widget="mail_thread" />
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="opex_september_view_search" model="ir.ui.view">
+            <field name="name">budget.opex.september.search</field>
+            <field name="model">opex.september.line</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="account_id" />
+                    <group string="Group By">
+                        <filter name="group_by_opex" string="Opex" context="{'group_by': 'opex_id'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="opex_september_action" model="ir.actions.act_window">
+            <field name="name">Opex September</field>
+            <field name="res_model">opex.september.line</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create a Opex September Line!</p>
+            </field>
+        </record>
+
+        <menuitem id="opex_september_menu" name="Opex September" parent="accounting_budget_extension_V7.menu_opex_line" action="opex_september_action" sequence="3" />
+
+        <!-- Opex October Line -->
+        <record id="opex_october_view_tree" model="ir.ui.view">
+            <field name="name">budget.opex.october.tree</field>
+            <field name="model">opex.october.line</field>
+            <field name="arch" type="xml">
+                <tree string="Opex October Tree">
+                    <field name="account_id" />
+                    <field name="opex_id"/>
+                    <field name="budget_amount" sum="Total" />
+                    <field name="actual_amount" sum="Total" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="opex_october_view_form" model="ir.ui.view">
+            <field name="name">budget.opex.october.form</field>
+            <field name="model">opex.october.line</field>
+            <field name="arch" type="xml">
+                <form string="Opex October Form">
+                    <sheet>
+                        <group>
+                            <group name="budget_informations">
+                                <field name="account_id" required="1"/>
+                                <field name="budget_id"/>
+                                <field name="opex_id"/>
+                            </group>
+                            <group name="total_left">
+                                <field name="from_date"/>
+                                <field name="to_date"/>
+                            </group>
+                            <group name="misc">
+                                <field name="budget_amount" />
+                                <field name="actual_amount" />
+                            </group>
+                            <group name="total_right">
+                                <field name="type_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" />
+                        <field name="message_ids" widget="mail_thread" />
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="opex_october_view_search" model="ir.ui.view">
+            <field name="name">budget.opex.october.search</field>
+            <field name="model">opex.october.line</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="account_id" />
+                    <group string="Group By">
+                        <filter name="group_by_opex" string="Opex" context="{'group_by': 'opex_id'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="opex_october_action" model="ir.actions.act_window">
+            <field name="name">Opex October</field>
+            <field name="res_model">opex.october.line</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create a Opex October Line!</p>
+            </field>
+        </record>
+
+        <menuitem id="opex_october_menu" name="Opex October" parent="accounting_budget_extension_V7.menu_opex_line" action="opex_october_action" sequence="4" />
+
+        <!-- Opex November Line -->
+        <record id="opex_november_view_tree" model="ir.ui.view">
+            <field name="name">budget.opex.november.tree</field>
+            <field name="model">opex.november.line</field>
+            <field name="arch" type="xml">
+                <tree string="Opex November Tree">
+                    <field name="account_id" />
+                    <field name="opex_id"/>
+                    <field name="budget_amount" sum="Total" />
+                    <field name="actual_amount" sum="Total" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="opex_november_view_form" model="ir.ui.view">
+            <field name="name">budget.opex.november.form</field>
+            <field name="model">opex.november.line</field>
+            <field name="arch" type="xml">
+                <form string="Opex November Form">
+                    <sheet>
+                        <group>
+                            <group name="budget_informations">
+                                <field name="account_id" required="1"/>
+                                <field name="budget_id"/>
+                                <field name="opex_id"/>
+                            </group>
+                            <group name="total_left">
+                                <field name="from_date"/>
+                                <field name="to_date"/>
+                            </group>
+                            <group name="misc">
+                                <field name="budget_amount" />
+                                <field name="actual_amount" />
+                            </group>
+                            <group name="total_right">
+                                <field name="type_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" />
+                        <field name="message_ids" widget="mail_thread" />
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="opex_november_view_search" model="ir.ui.view">
+            <field name="name">budget.opex.november.search</field>
+            <field name="model">opex.november.line</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="account_id" />
+                    <group string="Group By">
+                        <filter name="group_by_opex" string="Opex" context="{'group_by': 'opex_id'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="opex_november_action" model="ir.actions.act_window">
+            <field name="name">Opex November</field>
+            <field name="res_model">opex.november.line</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create a Opex November Line!</p>
+            </field>
+        </record>
+
+        <menuitem id="opex_november_menu" name="Opex November" parent="accounting_budget_extension_V7.menu_opex_line" action="opex_november_action" sequence="5" />
+
+        <!-- Opex December Line -->
+        <record id="opex_december_view_tree" model="ir.ui.view">
+            <field name="name">budget.opex.december.tree</field>
+            <field name="model">opex.december.line</field>
+            <field name="arch" type="xml">
+                <tree string="Opex December Tree">
+                    <field name="account_id" />
+                    <field name="opex_id"/>
+                    <field name="budget_amount" sum="Total" />
+                    <field name="actual_amount" sum="Total" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="opex_december_view_form" model="ir.ui.view">
+            <field name="name">budget.opex.december.form</field>
+            <field name="model">opex.december.line</field>
+            <field name="arch" type="xml">
+                <form string="Opex December Form">
+                    <sheet>
+                        <group>
+                            <group name="budget_informations">
+                                <field name="account_id" required="1"/>
+                                <field name="budget_id"/>
+                                <field name="opex_id"/>
+                            </group>
+                            <group name="total_left">
+                                <field name="from_date"/>
+                                <field name="to_date"/>
+                            </group>
+                            <group name="misc">
+                                <field name="budget_amount" />
+                                <field name="actual_amount" />
+                            </group>
+                            <group name="total_right">
+                                <field name="type_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" />
+                        <field name="message_ids" widget="mail_thread" />
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="opex_december_view_search" model="ir.ui.view">
+            <field name="name">budget.opex.december.search</field>
+            <field name="model">opex.december.line</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="account_id" />
+                    <group string="Group By">
+                        <filter name="group_by_opex" string="Opex" context="{'group_by': 'opex_id'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="opex_december_action" model="ir.actions.act_window">
+            <field name="name">Opex December</field>
+            <field name="res_model">opex.december.line</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create a Opex December Line!</p>
+            </field>
+        </record>
+
+        <menuitem id="opex_december_menu" name="Opex December" parent="accounting_budget_extension_V7.menu_opex_line" action="opex_december_action" sequence="6" />
+
+        <!-- Opex january Line -->
+        <record id="opex_january_view_tree" model="ir.ui.view">
+            <field name="name">budget.opex.january.tree</field>
+            <field name="model">opex.january.line</field>
+            <field name="arch" type="xml">
+                <tree string="Opex January Tree">
+                    <field name="account_id" />
+                    <field name="opex_id"/>
+                    <field name="budget_amount" sum="Total" />
+                    <field name="actual_amount" sum="Total" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="opex_january_view_form" model="ir.ui.view">
+            <field name="name">budget.opex.january.form</field>
+            <field name="model">opex.january.line</field>
+            <field name="arch" type="xml">
+                <form string="Opex January Form">
+                    <sheet>
+                        <group>
+                            <group name="budget_informations">
+                                <field name="account_id" required="1"/>
+                                <field name="budget_id"/>
+                                <field name="opex_id"/>
+                            </group>
+                            <group name="total_left">
+                                <field name="from_date"/>
+                                <field name="to_date"/>
+                            </group>
+                            <group name="misc">
+                                <field name="budget_amount" />
+                                <field name="actual_amount" />
+                            </group>
+                            <group name="total_right">
+                                <field name="type_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" />
+                        <field name="message_ids" widget="mail_thread" />
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="opex_january_view_search" model="ir.ui.view">
+            <field name="name">budget.opex.january.search</field>
+            <field name="model">opex.january.line</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="account_id" />
+                    <group string="Group By">
+                        <filter name="group_by_opex" string="Opex" context="{'group_by': 'opex_id'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="opex_january_action" model="ir.actions.act_window">
+            <field name="name">Opex January</field>
+            <field name="res_model">opex.january.line</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create a Opex January Line!</p>
+            </field>
+        </record>
+
+        <menuitem id="opex_january_menu" name="Opex January" parent="accounting_budget_extension_V7.menu_opex_line" action="opex_january_action" sequence="7" />
+
+        <!-- Opex February Line -->
+        <record id="opex_february_view_tree" model="ir.ui.view">
+            <field name="name">budget.opex.february.tree</field>
+            <field name="model">opex.february.line</field>
+            <field name="arch" type="xml">
+                <tree string="Opex February Tree">
+                    <field name="account_id" />
+                    <field name="opex_id"/>
+                    <field name="budget_amount" sum="Total" />
+                    <field name="actual_amount" sum="Total" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="opex_february_view_form" model="ir.ui.view">
+            <field name="name">budget.opex.february.form</field>
+            <field name="model">opex.february.line</field>
+            <field name="arch" type="xml">
+                <form string="Opex February Form">
+                    <sheet>
+                        <group>
+                            <group name="budget_informations">
+                                <field name="account_id" required="1"/>
+                                <field name="budget_id"/>
+                                <field name="opex_id"/>
+                            </group>
+                            <group name="total_left">
+                                <field name="from_date"/>
+                                <field name="to_date"/>
+                            </group>
+                            <group name="misc">
+                                <field name="budget_amount" />
+                                <field name="actual_amount" />
+                            </group>
+                            <group name="total_right">
+                                <field name="type_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" />
+                        <field name="message_ids" widget="mail_thread" />
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="opex_february_view_search" model="ir.ui.view">
+            <field name="name">budget.opex.february.search</field>
+            <field name="model">opex.february.line</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="account_id" />
+                    <group string="Group By">
+                        <filter name="group_by_opex" string="Opex" context="{'group_by': 'opex_id'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="opex_february_action" model="ir.actions.act_window">
+            <field name="name">Opex February</field>
+            <field name="res_model">opex.february.line</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create a Opex February Line!</p>
+            </field>
+        </record>
+
+        <menuitem id="opex_february_menu" name="Opex February" parent="accounting_budget_extension_V7.menu_opex_line" action="opex_february_action" sequence="8" />
+
+        <!-- Opex March Line -->
+        <record id="opex_march_view_tree" model="ir.ui.view">
+            <field name="name">budget.opex.march.tree</field>
+            <field name="model">opex.march.line</field>
+            <field name="arch" type="xml">
+                <tree string="Opex March Tree">
+                    <field name="account_id" />
+                    <field name="opex_id"/>
+                    <field name="budget_amount" sum="Total" />
+                    <field name="actual_amount" sum="Total" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="opex_march_view_form" model="ir.ui.view">
+            <field name="name">budget.opex.march.form</field>
+            <field name="model">opex.march.line</field>
+            <field name="arch" type="xml">
+                <form string="Opex March Form">
+                    <sheet>
+                        <group>
+                            <group name="budget_informations">
+                                <field name="account_id" required="1"/>
+                                <field name="budget_id"/>
+                                <field name="opex_id"/>
+                            </group>
+                            <group name="total_left">
+                                <field name="from_date"/>
+                                <field name="to_date"/>
+                            </group>
+                            <group name="misc">
+                                <field name="budget_amount" />
+                                <field name="actual_amount" />
+                            </group>
+                            <group name="total_right">
+                                <field name="type_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" />
+                        <field name="message_ids" widget="mail_thread" />
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="opex_march_view_search" model="ir.ui.view">
+            <field name="name">budget.opex.march.search</field>
+            <field name="model">opex.march.line</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="account_id" />
+                    <group string="Group By">
+                        <filter name="group_by_opex" string="Opex" context="{'group_by': 'opex_id'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="opex_march_action" model="ir.actions.act_window">
+            <field name="name">Opex March</field>
+            <field name="res_model">opex.march.line</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create a Opex March Line!</p>
+            </field>
+        </record>
+
+        <menuitem id="opex_march_menu" name="Opex March" parent="accounting_budget_extension_V7.menu_opex_line" action="opex_march_action" sequence="9" />
+
+        <!-- Opex April Line -->
+        <record id="opex_april_view_tree" model="ir.ui.view">
+            <field name="name">budget.opex.april.tree</field>
+            <field name="model">opex.april.line</field>
+            <field name="arch" type="xml">
+                <tree string="Opex April Tree">
+                    <field name="account_id" />
+                    <field name="opex_id"/>
+                    <field name="budget_amount" sum="Total" />
+                    <field name="actual_amount" sum="Total" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="opex_april_view_form" model="ir.ui.view">
+            <field name="name">budget.opex.april.form</field>
+            <field name="model">opex.april.line</field>
+            <field name="arch" type="xml">
+                <form string="Opex April Form">
+                    <sheet>
+                        <group>
+                            <group name="budget_informations">
+                                <field name="account_id" required="1"/>
+                                <field name="budget_id"/>
+                                <field name="opex_id"/>
+                            </group>
+                            <group name="total_left">
+                                <field name="from_date"/>
+                                <field name="to_date"/>
+                            </group>
+                            <group name="misc">
+                                <field name="budget_amount" />
+                                <field name="actual_amount" />
+                            </group>
+                            <group name="total_right">
+                                <field name="type_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" />
+                        <field name="message_ids" widget="mail_thread" />
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="opex_april_view_search" model="ir.ui.view">
+            <field name="name">budget.opex.april.search</field>
+            <field name="model">opex.april.line</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="account_id" />
+                    <group string="Group By">
+                        <filter name="group_by_opex" string="Opex" context="{'group_by': 'opex_id'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="opex_april_action" model="ir.actions.act_window">
+            <field name="name">Opex April</field>
+            <field name="res_model">opex.april.line</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create a Opex April Line!</p>
+            </field>
+        </record>
+
+        <menuitem id="opex_april_menu" name="Opex April" parent="accounting_budget_extension_V7.menu_opex_line" action="opex_april_action" sequence="10" />
+
+        <!-- Opex May Line -->
+        <record id="opex_may_view_tree" model="ir.ui.view">
+            <field name="name">budget.opex.may.tree</field>
+            <field name="model">opex.may.line</field>
+            <field name="arch" type="xml">
+                <tree string="Opex May Tree">
+                    <field name="account_id" />
+                    <field name="opex_id"/>
+                    <field name="budget_amount" sum="Total" />
+                    <field name="actual_amount" sum="Total" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="opex_may_view_form" model="ir.ui.view">
+            <field name="name">budget.opex.may.form</field>
+            <field name="model">opex.may.line</field>
+            <field name="arch" type="xml">
+                <form string="Opex May Form">
+                    <sheet>
+                        <group>
+                            <group name="budget_informations">
+                                <field name="account_id" required="1"/>
+                                <field name="budget_id"/>
+                                <field name="opex_id"/>
+                            </group>
+                            <group name="total_left">
+                                <field name="from_date"/>
+                                <field name="to_date"/>
+                            </group>
+                            <group name="misc">
+                                <field name="budget_amount" />
+                                <field name="actual_amount" />
+                            </group>
+                            <group name="total_right">
+                                <field name="type_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" />
+                        <field name="message_ids" widget="mail_thread" />
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="opex_may_view_search" model="ir.ui.view">
+            <field name="name">budget.opex.may.search</field>
+            <field name="model">opex.may.line</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="account_id" />
+                    <group string="Group By">
+                        <filter name="group_by_opex" string="Opex" context="{'group_by': 'opex_id'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="opex_may_action" model="ir.actions.act_window">
+            <field name="name">Opex May</field>
+            <field name="res_model">opex.may.line</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create a Opex May Line!</p>
+            </field>
+        </record>
+
+        <menuitem id="opex_may_menu" name="Opex May" parent="accounting_budget_extension_V7.menu_opex_line" action="opex_may_action" sequence="11" />
+
+        <!-- Opex June Line -->
+        <record id="opex_june_view_tree" model="ir.ui.view">
+            <field name="name">budget.opex.june.tree</field>
+            <field name="model">opex.june.line</field>
+            <field name="arch" type="xml">
+                <tree string="Opex June Tree">
+                    <field name="account_id" />
+                    <field name="opex_id"/>
+                    <field name="budget_amount" sum="Total" />
+                    <field name="actual_amount" sum="Total" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="opex_june_view_form" model="ir.ui.view">
+            <field name="name">budget.opex.june.form</field>
+            <field name="model">opex.june.line</field>
+            <field name="arch" type="xml">
+                <form string="Opex June Form">
+                    <sheet>
+                        <group>
+                            <group name="budget_informations">
+                                <field name="account_id" required="1"/>
+                                <field name="budget_id"/>
+                                <field name="opex_id"/>
+                            </group>
+                            <group name="total_left">
+                                <field name="from_date"/>
+                                <field name="to_date"/>
+                            </group>
+                            <group name="misc">
+                                <field name="budget_amount" />
+                                <field name="actual_amount" />
+                            </group>
+                            <group name="total_right">
+                                <field name="type_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" />
+                        <field name="message_ids" widget="mail_thread" />
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="opex_june_view_search" model="ir.ui.view">
+            <field name="name">budget.opex.june.search</field>
+            <field name="model">opex.june.line</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="account_id" />
+                    <group string="Group By">
+                        <filter name="group_by_opex" string="Opex" context="{'group_by': 'opex_id'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="opex_june_action" model="ir.actions.act_window">
+            <field name="name">Opex June</field>
+            <field name="res_model">opex.june.line</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create a Opex June Line!</p>
+            </field>
+        </record>
+
+        <menuitem id="opex_june_menu" name="Opex June" parent="accounting_budget_extension_V7.menu_opex_line" action="opex_june_action" sequence="12" />
+
+    </data>
+</odoo>

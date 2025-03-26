@@ -1,0 +1,45 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+access_budgetextension_budget_manager,budgetextension manager,model_budgetextension_budget,account.group_account_manager,1,1,1,1
+access_budgetextension_budget_reader,budgetextension reader,model_budgetextension_budget,account.group_account_user,1,0,0,0
+access_allowance_budget_manager,allowance budget manager,model_allowance_budget,account.group_account_manager,1,1,1,1
+payroll_line_m_manager,payroll line m manager,model_payroll_budget_line_m,account.group_account_manager,1,1,1,1
+payroll_budget_manager,payroll budget manager,model_payroll_budget,account.group_account_manager,1,1,1,1
+payroll_line_master_manager,payroll line master manager,model_payroll_budget_line_master,account.group_account_manager,1,1,1,1
+rental_budget_category_manager,rental budget category manager,model_rental_budget_category,account.group_account_manager,1,1,1,1
+rental_budget_line_manager,rental budget line manager,model_rental_budget_line,account.group_account_manager,1,1,1,1
+rental_budget_manager,rental budget manager,model_rental_budget,account.group_account_manager,1,1,1,1
+revenue_budget_ygn_manager,revenue budget ygn manager,model_revenue_budget_ygn,account.group_account_manager,1,1,1,1
+revenue_budget_npt_line_manager,revenue budget npt line manager,model_revenue_budget_npt_line,account.group_account_manager,1,1,1,1
+revenue_budget_npt_manager,revenue budget npt manager,model_revenue_budget_npt,account.group_account_manager,1,1,1,1
+capital_budget_template_manager,capital budget template manager,model_capital_budget_template,account.group_account_manager,1,1,1,1
+capital_budget_line_manager,capital budget line manager,model_capital_budget_line,account.group_account_manager,1,1,1,1
+capital_budget_type_manager,capital budget type manager,model_capital_budget_type,account.group_account_manager,1,1,1,1
+budget_opex_manager,budget opex manager,model_budget_opex,account.group_account_manager,1,1,1,1
+budget_opex_type_manager,budget opex type manager,model_budget_opex_type,account.group_account_manager,1,1,1,1
+opex_july_line_manager,opex july line manager,model_opex_july_line,account.group_account_manager,1,1,1,1
+opex_august_line_manager,opex august line manager,model_opex_august_line,account.group_account_manager,1,1,1,1
+opex_september_line_manager,opex september line manager,model_opex_september_line,account.group_account_manager,1,1,1,1
+opex_october_line_manager,opex october line manager,model_opex_october_line,account.group_account_manager,1,1,1,1
+opex_november_line_manager,opex november line manager,model_opex_november_line,account.group_account_manager,1,1,1,1
+opex_december_line_manager,opex december line manager,model_opex_december_line,account.group_account_manager,1,1,1,1
+opex_january_line_manager,opex january line manager,model_opex_january_line,account.group_account_manager,1,1,1,1
+opex_february_line_manager,opex february line manager,model_opex_february_line,account.group_account_manager,1,1,1,1
+opex_march_line_manager,opex march line manager,model_opex_march_line,account.group_account_manager,1,1,1,1
+opex_april_line_manager,opex april line manager,model_opex_april_line,account.group_account_manager,1,1,1,1
+opex_may_line_manager,opex may line manager,model_opex_may_line,account.group_account_manager,1,1,1,1
+opex_june_line_manager,opex june line manager,model_opex_june_line,account.group_account_manager,1,1,1,1
+budget_capex_manager,budget capex manager,model_budget_capex,account.group_account_manager,1,1,1,1
+budget_capex_type_manager,budget capex type manager,model_budget_capex_type,account.group_account_manager,1,1,1,1
+capex_july_line_manager,capex july line manager,model_capex_july_line,account.group_account_manager,1,1,1,1
+capex_august_line_manager,capex august line manager,model_capex_august_line,account.group_account_manager,1,1,1,1
+capex_september_line_manager,capex september line manager,model_capex_september_line,account.group_account_manager,1,1,1,1
+capex_october_line_manager,capex october line manager,model_capex_october_line,account.group_account_manager,1,1,1,1
+capex_november_line_manager,capex november line manager,model_capex_november_line,account.group_account_manager,1,1,1,1
+capex_december_line_manager,capex december line manager,model_capex_december_line,account.group_account_manager,1,1,1,1
+capex_january_line_manager,capex january line manager,model_capex_january_line,account.group_account_manager,1,1,1,1
+capex_february_line_manager,capex february line manager,model_capex_february_line,account.group_account_manager,1,1,1,1
+capex_march_line_manager,capex march line manager,model_capex_march_line,account.group_account_manager,1,1,1,1
+capex_april_line_manager,capex april line manager,model_capex_april_line,account.group_account_manager,1,1,1,1
+capex_may_line_manager,capex may line manager,model_capex_may_line,account.group_account_manager,1,1,1,1
+capex_june_line_manager,capex june line manager,model_capex_june_line,account.group_account_manager,1,1,1,1
+access_budgetextension_grouping,access_budgetextension_grouping,accounting_budget_extension_V7.model_budgetextension_grouping,base.group_user,1,1,1,1

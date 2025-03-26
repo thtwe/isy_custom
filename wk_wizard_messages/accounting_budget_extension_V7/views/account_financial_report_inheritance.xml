@@ -1,0 +1,10 @@
+<odoo>
+
+    <template id="search_template_comparison_inherit" inherit_id="account_reports.search_template_comparison">
+        <xpath expr="//a[@data-filter='previous_period_filter']" position="before">
+            <a role="menuitem" title="Budget Comparison" data-filter="budget_comparison" class="dropdown-item js_account_report_date_cmp_filter">Budget Comparison</a>
+            <div role="separator" class="dropdown-divider"></div>
+        </xpath>
+    </template>
+
+</odoo>

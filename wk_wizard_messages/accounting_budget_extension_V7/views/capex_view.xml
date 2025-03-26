@@ -1,0 +1,1021 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <menuitem id="menu_capex" name="Capex" parent="accounting_budget_extension_V7.menu_financial_report_root" sequence="5" />
+
+        <menuitem id="menu_capex_line" name="Capex Line" parent="accounting_budget_extension_V7.menu_capex" sequence="2" />
+
+        <record id="capex_view_tree" model="ir.ui.view">
+            <field name="name">budget.capex.tree</field>
+            <field name="model">budget.capex</field>
+            <field name="arch" type="xml">
+                <tree string="Capex Tree" default_order="sequence">
+                    <field name="sequence" invisible="1"/>
+                    <field name="name" />
+                    <field name="jul_total" sum="Total" widget="integer"/>
+                    <field name="aug_total" sum="Total" widget="integer"/>
+                    <field name="sep_total" sum="Total" widget="integer"/>
+                    <field name="oct_total" sum="Total" widget="integer"/>
+                    <field name="nov_total" sum="Total" widget="integer"/>
+                    <field name="dec_total" sum="Total" widget="integer"/>
+                    <field name="jan_total" sum="Total" widget="integer"/>
+                    <field name="feb_total" sum="Total" widget="integer"/>
+                    <field name="mar_total" sum="Total" widget="integer"/>
+                    <field name="apr_total" sum="Total" widget="integer"/>
+                    <field name="may_total" sum="Total" widget="integer"/>
+                    <field name="jun_total" sum="Total" widget="integer"/>
+                    <field name="actual_total" sum="Acutal Total" widget="integer" />   
+                    <field name="budget_total" sum="Budget Total" widget="integer" />
+                    <field name="percentage" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="capex_view_form" model="ir.ui.view">
+            <field name="name">budget.capex.form</field>
+            <field name="model">budget.capex</field>
+            <field name="arch" type="xml">
+                <form string="Capex Form">
+                    <sheet>
+                        <h1>
+                            <field name="name" required="1" placeholder="e.g. Application Fees" />
+                        </h1>
+                        <group>
+                            <group name="budget_informations">
+                                <field name="budget_total" widget="integer" />
+                                <field name="actual_total"  widget="integer" />
+                                <field name="percentage" />
+                            </group>
+                            <group name="misc">
+                                <field name="sequence" />
+                                <field name="capex_type_id" widget="selection"/>
+                                <field name="from_date"/>
+                                <field name="to_date" />
+                            </group>
+                            <group name="total_left">
+                                <field name="jul_total" widget="integer"/>
+                                <field name="aug_total" widget="integer"/>
+                                <field name="sep_total" widget="integer"/>
+                                <field name="oct_total" widget="integer"/>
+                                <field name="nov_total" widget="integer"/>
+                                <field name="dec_total" widget="integer"/>
+                            </group>
+                            <group name="total_right">
+                                <field name="jan_total" widget="integer"/>
+                                <field name="feb_total" widget="integer"/>
+                                <field name="mar_total" widget="integer"/>
+                                <field name="apr_total" widget="integer"/>
+                                <field name="may_total" widget="integer"/>
+                                <field name="jun_total" widget="integer"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="July" name="capex_july_lines">
+                                <field name="jul_line_ids" nolable="1">
+                                    <tree string="July" editable="bottom">
+                                        <field name="account_id"/>
+                                        <field name="actual_amount"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="August" name="capex_august_lines">
+                                <field name="aug_line_ids" nolable="1">
+                                    <tree string="August" editable="bottom">
+                                        <field name="account_id"/>
+                                        <field name="actual_amount"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="September" name="capex_september_lines">
+                                <field name="sep_line_ids" nolable="1">
+                                    <tree string="Septembere" editable="bottom">
+                                        <field name="account_id"/>
+                                        <field name="actual_amount"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="October" name="capex_october_lines">
+                                <field name="oct_line_ids" nolable="1">
+                                    <tree string="October" editable="bottom">
+                                        <field name="account_id"/>
+                                        <field name="actual_amount"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="November" name="capex_november_lines">
+                                <field name="nov_line_ids" nolable="1">
+                                    <tree string="November" editable="bottom">
+                                        <field name="account_id"/>
+                                        <field name="actual_amount"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="December" name="capex_december_lines">
+                                <field name="dec_line_ids" nolable="1">
+                                    <tree string="December" editable="bottom">
+                                        <field name="account_id"/>
+                                        <field name="actual_amount"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="January" name="capex_january_lines">
+                                <field name="jan_line_ids" nolable="1">
+                                    <tree string="January" editable="bottom">
+                                        <field name="account_id"/>
+                                        <field name="actual_amount"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="February" name="capex_february_lines">
+                                <field name="feb_line_ids" nolable="1">
+                                    <tree string="February" editable="bottom">
+                                        <field name="account_id"/>
+                                        <field name="actual_amount"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="March" name="capex_march_lines">
+                                <field name="mar_line_ids" nolable="1">
+                                    <tree string="March" editable="bottom">
+                                        <field name="account_id"/>
+                                        <field name="actual_amount"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="April" name="capex_april_lines">
+                                <field name="apr_line_ids" nolable="1">
+                                    <tree string="April" editable="bottom">
+                                        <field name="account_id"/>
+                                        <field name="actual_amount"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="May" name="capex_may_lines">
+                                <field name="may_line_ids" nolable="1">
+                                    <tree string="May" editable="bottom">
+                                        <field name="account_id"/>
+                                        <field name="actual_amount"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="June" name="capex_june_lines">
+                                <field name="jun_line_ids" nolable="1">
+                                    <tree string="June" editable="bottom">
+                                        <field name="account_id"/>
+                                        <field name="actual_amount"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" />
+                        <field name="message_ids" widget="mail_thread" />
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="capex_view_search" model="ir.ui.view">
+            <field name="name">budget.capex.search</field>
+            <field name="model">budget.capex</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name" />
+                    <group string="Group By">
+                        <filter name="group_by_capex_type" string="Capex" context="{'group_by': 'capex_type_id'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="capex_action" model="ir.actions.act_window">
+            <field name="name">Capex</field>
+            <field name="res_model">budget.capex</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context" eval="{'search_default_group_by_capex_type': 1}" />
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create an Capex!</p>
+            </field>
+        </record>
+
+        <menuitem id="capex_menu" name="Capex" parent="accounting_budget_extension_V7.menu_capex" action="capex_action" sequence="1" />
+
+        <!-- Capex July Line -->
+        <record id="capex_july_view_tree" model="ir.ui.view">
+            <field name="name">budget.capex.july.tree</field>
+            <field name="model">capex.july.line</field>
+            <field name="arch" type="xml">
+                <tree string="Capex July Tree">
+                    <field name="account_id" />
+                    <field name="capex_id"/>
+                    <field name="actual_amount" sum="Total" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="capex_july_view_form" model="ir.ui.view">
+            <field name="name">budget.capex.july.form</field>
+            <field name="model">capex.july.line</field>
+            <field name="arch" type="xml">
+                <form string="Capex July Form">
+                    <sheet>
+                        <group>
+                            <group name="budget_informations">
+                                <field name="account_id" required="1"/>
+                                <field name="capex_id"/>
+                            </group>
+                            <group name="total_left">
+                                <field name="from_date"/>
+                                <field name="to_date"/>
+                            </group>
+                            <group name="misc">
+                                <field name="actual_amount" />
+                            </group>
+                            <group name="total_right">
+                                <field name="type_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" />
+                        <field name="message_ids" widget="mail_thread" />
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="capex_july_view_search" model="ir.ui.view">
+            <field name="name">budget.capex.july.search</field>
+            <field name="model">capex.july.line</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="account_id" />
+                    <group string="Group By">
+                        <filter name="group_by_capex" string="Capex" context="{'group_by': 'capex_id'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="capex_july_action" model="ir.actions.act_window">
+            <field name="name">Capex July</field>
+            <field name="res_model">capex.july.line</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create a Capex July Line!</p>
+            </field>
+        </record>
+
+        <menuitem id="capex_july_menu" name="Capex July" parent="accounting_budget_extension_V7.menu_capex_line" action="capex_july_action" sequence="1" />
+
+        <!-- Capex August Line -->
+        <record id="capex_august_view_tree" model="ir.ui.view">
+            <field name="name">budget.capex.august.tree</field>
+            <field name="model">capex.august.line</field>
+            <field name="arch" type="xml">
+                <tree string="Capex August Tree">
+                    <field name="account_id" />
+                    <field name="capex_id"/>
+                    <field name="actual_amount" sum="Total" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="capex_august_view_form" model="ir.ui.view">
+            <field name="name">budget.capex.august.form</field>
+            <field name="model">capex.august.line</field>
+            <field name="arch" type="xml">
+                <form string="Capex August Form">
+                    <sheet>
+                        <group>
+                            <group name="budget_informations">
+                                <field name="account_id" required="1"/>
+                                <field name="capex_id"/>
+                            </group>
+                            <group name="total_left">
+                                <field name="from_date"/>
+                                <field name="to_date"/>
+                            </group>
+                            <group name="misc">
+                                <field name="actual_amount" />
+                            </group>
+                            <group name="total_right">
+                                <field name="type_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" />
+                        <field name="message_ids" widget="mail_thread" />
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="capex_august_view_search" model="ir.ui.view">
+            <field name="name">budget.capex.august.search</field>
+            <field name="model">capex.august.line</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="account_id" />
+                    <group string="Group By">
+                        <filter name="group_by_capex" string="Capex" context="{'group_by': 'capex_id'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="capex_august_action" model="ir.actions.act_window">
+            <field name="name">Capex August</field>
+            <field name="res_model">capex.august.line</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create a Capex August Line!</p>
+            </field>
+        </record>
+
+        <menuitem id="capex_august_menu" name="Capex August" parent="accounting_budget_extension_V7.menu_capex_line" action="capex_august_action" sequence="2" />
+
+        <!-- Capex September Line -->
+        <record id="capex_september_view_tree" model="ir.ui.view">
+            <field name="name">budget.capex.september.tree</field>
+            <field name="model">capex.september.line</field>
+            <field name="arch" type="xml">
+                <tree string="Capex September Tree">
+                    <field name="account_id" />
+                    <field name="capex_id"/>
+                    <field name="actual_amount" sum="Total" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="capex_september_view_form" model="ir.ui.view">
+            <field name="name">budget.capex.september.form</field>
+            <field name="model">capex.september.line</field>
+            <field name="arch" type="xml">
+                <form string="Capex September Form">
+                    <sheet>
+                        <group>
+                            <group name="budget_informations">
+                                <field name="account_id" required="1"/>
+                                <field name="capex_id"/>
+                            </group>
+                            <group name="total_left">
+                                <field name="from_date"/>
+                                <field name="to_date"/>
+                            </group>
+                            <group name="misc">
+                                <field name="actual_amount" />
+                            </group>
+                            <group name="total_right">
+                                <field name="type_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" />
+                        <field name="message_ids" widget="mail_thread" />
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="capex_september_view_search" model="ir.ui.view">
+            <field name="name">budget.capex.september.search</field>
+            <field name="model">capex.september.line</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="account_id" />
+                    <group string="Group By">
+                        <filter name="group_by_capex" string="Capex" context="{'group_by': 'capex_id'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="capex_september_action" model="ir.actions.act_window">
+            <field name="name">Capex September</field>
+            <field name="res_model">capex.september.line</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create a Capex September Line!</p>
+            </field>
+        </record>
+
+        <menuitem id="capex_september_menu" name="Capex September" parent="accounting_budget_extension_V7.menu_capex_line" action="capex_september_action" sequence="3" />
+
+        <!-- Capex October Line -->
+        <record id="capex_october_view_tree" model="ir.ui.view">
+            <field name="name">budget.capex.october.tree</field>
+            <field name="model">capex.october.line</field>
+            <field name="arch" type="xml">
+                <tree string="Capex October Tree">
+                    <field name="account_id" />
+                    <field name="capex_id"/>
+                    <field name="actual_amount" sum="Total" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="capex_october_view_form" model="ir.ui.view">
+            <field name="name">budget.capex.october.form</field>
+            <field name="model">capex.october.line</field>
+            <field name="arch" type="xml">
+                <form string="Capex October Form">
+                    <sheet>
+                        <group>
+                            <group name="budget_informations">
+                                <field name="account_id" required="1"/>
+                                <field name="capex_id"/>
+                            </group>
+                            <group name="total_left">
+                                <field name="from_date"/>
+                                <field name="to_date"/>
+                            </group>
+                            <group name="misc">
+                                <field name="actual_amount" />
+                            </group>
+                            <group name="total_right">
+                                <field name="type_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" />
+                        <field name="message_ids" widget="mail_thread" />
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="capex_october_view_search" model="ir.ui.view">
+            <field name="name">budget.capex.october.search</field>
+            <field name="model">capex.october.line</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="account_id" />
+                    <group string="Group By">
+                        <filter name="group_by_capex" string="Capex" context="{'group_by': 'capex_id'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="capex_october_action" model="ir.actions.act_window">
+            <field name="name">Capex October</field>
+            <field name="res_model">capex.october.line</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create a Capex October Line!</p>
+            </field>
+        </record>
+
+        <menuitem id="capex_october_menu" name="Capex October" parent="accounting_budget_extension_V7.menu_capex_line" action="capex_october_action" sequence="4" />
+
+        <!-- Capex November Line -->
+        <record id="capex_november_view_tree" model="ir.ui.view">
+            <field name="name">budget.capex.november.tree</field>
+            <field name="model">capex.november.line</field>
+            <field name="arch" type="xml">
+                <tree string="Capex November Tree">
+                    <field name="account_id" />
+                    <field name="capex_id"/>
+                    <field name="actual_amount" sum="Total" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="capex_november_view_form" model="ir.ui.view">
+            <field name="name">budget.capex.november.form</field>
+            <field name="model">capex.november.line</field>
+            <field name="arch" type="xml">
+                <form string="Capex November Form">
+                    <sheet>
+                        <group>
+                            <group name="budget_informations">
+                                <field name="account_id" required="1"/>
+                                <field name="capex_id"/>
+                            </group>
+                            <group name="total_left">
+                                <field name="from_date"/>
+                                <field name="to_date"/>
+                            </group>
+                            <group name="misc">
+                                <field name="actual_amount" />
+                            </group>
+                            <group name="total_right">
+                                <field name="type_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" />
+                        <field name="message_ids" widget="mail_thread" />
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="capex_november_view_search" model="ir.ui.view">
+            <field name="name">budget.capex.november.search</field>
+            <field name="model">capex.november.line</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="account_id" />
+                    <group string="Group By">
+                        <filter name="group_by_capex" string="Capex" context="{'group_by': 'capex_id'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="capex_november_action" model="ir.actions.act_window">
+            <field name="name">Capex November</field>
+            <field name="res_model">capex.november.line</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create a Capex November Line!</p>
+            </field>
+        </record>
+
+        <menuitem id="capex_november_menu" name="Capex November" parent="accounting_budget_extension_V7.menu_capex_line" action="capex_november_action" sequence="5" />
+
+        <!-- Capex December Line -->
+        <record id="capex_december_view_tree" model="ir.ui.view">
+            <field name="name">budget.capex.december.tree</field>
+            <field name="model">capex.december.line</field>
+            <field name="arch" type="xml">
+                <tree string="Capex December Tree">
+                    <field name="account_id" />
+                    <field name="capex_id"/>
+                    <field name="actual_amount" sum="Total" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="capex_december_view_form" model="ir.ui.view">
+            <field name="name">budget.capex.december.form</field>
+            <field name="model">capex.december.line</field>
+            <field name="arch" type="xml">
+                <form string="Capex December Form">
+                    <sheet>
+                        <group>
+                            <group name="budget_informations">
+                                <field name="account_id" required="1"/>
+                                <field name="capex_id"/>
+                            </group>
+                            <group name="total_left">
+                                <field name="from_date"/>
+                                <field name="to_date"/>
+                            </group>
+                            <group name="misc">
+                                <field name="actual_amount" />
+                            </group>
+                            <group name="total_right">
+                                <field name="type_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" />
+                        <field name="message_ids" widget="mail_thread" />
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="capex_december_view_search" model="ir.ui.view">
+            <field name="name">budget.capex.december.search</field>
+            <field name="model">capex.december.line</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="account_id" />
+                    <group string="Group By">
+                        <filter name="group_by_capex" string="Capex" context="{'group_by': 'capex_id'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="capex_december_action" model="ir.actions.act_window">
+            <field name="name">Capex December</field>
+            <field name="res_model">capex.december.line</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create a Capex December Line!</p>
+            </field>
+        </record>
+
+        <menuitem id="capex_december_menu" name="Capex December" parent="accounting_budget_extension_V7.menu_capex_line" action="capex_december_action" sequence="6" />
+
+        <!-- Capex january Line -->
+        <record id="capex_january_view_tree" model="ir.ui.view">
+            <field name="name">budget.capex.january.tree</field>
+            <field name="model">capex.january.line</field>
+            <field name="arch" type="xml">
+                <tree string="Capex January Tree">
+                    <field name="account_id" />
+                    <field name="capex_id"/>
+                    <field name="actual_amount" sum="Total" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="capex_january_view_form" model="ir.ui.view">
+            <field name="name">budget.capex.january.form</field>
+            <field name="model">capex.january.line</field>
+            <field name="arch" type="xml">
+                <form string="Capex January Form">
+                    <sheet>
+                        <group>
+                            <group name="budget_informations">
+                                <field name="account_id" required="1"/>
+                                <field name="capex_id"/>
+                            </group>
+                            <group name="total_left">
+                                <field name="from_date"/>
+                                <field name="to_date"/>
+                            </group>
+                            <group name="misc">
+                                <field name="actual_amount" />
+                            </group>
+                            <group name="total_right">
+                                <field name="type_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" />
+                        <field name="message_ids" widget="mail_thread" />
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="capex_january_view_search" model="ir.ui.view">
+            <field name="name">budget.capex.january.search</field>
+            <field name="model">capex.january.line</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="account_id" />
+                    <group string="Group By">
+                        <filter name="group_by_capex" string="Capex" context="{'group_by': 'capex_id'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="capex_january_action" model="ir.actions.act_window">
+            <field name="name">Capex January</field>
+            <field name="res_model">capex.january.line</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create a Capex January Line!</p>
+            </field>
+        </record>
+
+        <menuitem id="capex_january_menu" name="Capex January" parent="accounting_budget_extension_V7.menu_capex_line" action="capex_january_action" sequence="7" />
+
+        <!-- Capex February Line -->
+        <record id="capex_february_view_tree" model="ir.ui.view">
+            <field name="name">budget.capex.february.tree</field>
+            <field name="model">capex.february.line</field>
+            <field name="arch" type="xml">
+                <tree string="Capex February Tree">
+                    <field name="account_id" />
+                    <field name="capex_id"/>
+                    <field name="actual_amount" sum="Total" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="capex_february_view_form" model="ir.ui.view">
+            <field name="name">budget.capex.february.form</field>
+            <field name="model">capex.february.line</field>
+            <field name="arch" type="xml">
+                <form string="Capex February Form">
+                    <sheet>
+                        <group>
+                            <group name="budget_informations">
+                                <field name="account_id" required="1"/>
+                                <field name="capex_id"/>
+                            </group>
+                            <group name="total_left">
+                                <field name="from_date"/>
+                                <field name="to_date"/>
+                            </group>
+                            <group name="misc">
+                                <field name="actual_amount" />
+                            </group>
+                            <group name="total_right">
+                                <field name="type_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" />
+                        <field name="message_ids" widget="mail_thread" />
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="capex_february_view_search" model="ir.ui.view">
+            <field name="name">budget.capex.february.search</field>
+            <field name="model">capex.february.line</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="account_id" />
+                    <group string="Group By">
+                        <filter name="group_by_capex" string="Capex" context="{'group_by': 'capex_id'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="capex_february_action" model="ir.actions.act_window">
+            <field name="name">Capex February</field>
+            <field name="res_model">capex.february.line</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create a Capex February Line!</p>
+            </field>
+        </record>
+
+        <menuitem id="capex_february_menu" name="Capex February" parent="accounting_budget_extension_V7.menu_capex_line" action="capex_february_action" sequence="8" />
+
+        <!-- Capex March Line -->
+        <record id="capex_march_view_tree" model="ir.ui.view">
+            <field name="name">budget.capex.march.tree</field>
+            <field name="model">capex.march.line</field>
+            <field name="arch" type="xml">
+                <tree string="Capex March Tree">
+                    <field name="account_id" />
+                    <field name="capex_id"/>
+                    <field name="actual_amount" sum="Total" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="capex_march_view_form" model="ir.ui.view">
+            <field name="name">budget.capex.march.form</field>
+            <field name="model">capex.march.line</field>
+            <field name="arch" type="xml">
+                <form string="Capex March Form">
+                    <sheet>
+                        <group>
+                            <group name="budget_informations">
+                                <field name="account_id" required="1"/>
+                                <field name="capex_id"/>
+                            </group>
+                            <group name="total_left">
+                                <field name="from_date"/>
+                                <field name="to_date"/>
+                            </group>
+                            <group name="misc">
+                                <field name="actual_amount" />
+                            </group>
+                            <group name="total_right">
+                                <field name="type_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" />
+                        <field name="message_ids" widget="mail_thread" />
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="capex_march_view_search" model="ir.ui.view">
+            <field name="name">budget.capex.march.search</field>
+            <field name="model">capex.march.line</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="account_id" />
+                    <group string="Group By">
+                        <filter name="group_by_capex" string="Capex" context="{'group_by': 'capex_id'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="capex_march_action" model="ir.actions.act_window">
+            <field name="name">Capex March</field>
+            <field name="res_model">capex.march.line</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create a Capex March Line!</p>
+            </field>
+        </record>
+
+        <menuitem id="capex_march_menu" name="Capex March" parent="accounting_budget_extension_V7.menu_capex_line" action="capex_march_action" sequence="9" />
+
+        <!-- Capex April Line -->
+        <record id="capex_april_view_tree" model="ir.ui.view">
+            <field name="name">budget.capex.april.tree</field>
+            <field name="model">capex.april.line</field>
+            <field name="arch" type="xml">
+                <tree string="Capex April Tree">
+                    <field name="account_id" />
+                    <field name="capex_id"/>
+                    <field name="actual_amount" sum="Total" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="capex_april_view_form" model="ir.ui.view">
+            <field name="name">budget.capex.april.form</field>
+            <field name="model">capex.april.line</field>
+            <field name="arch" type="xml">
+                <form string="Capex April Form">
+                    <sheet>
+                        <group>
+                            <group name="budget_informations">
+                                <field name="account_id" required="1"/>
+                                <field name="capex_id"/>
+                            </group>
+                            <group name="total_left">
+                                <field name="from_date"/>
+                                <field name="to_date"/>
+                            </group>
+                            <group name="misc">
+                                <field name="actual_amount" />
+                            </group>
+                            <group name="total_right">
+                                <field name="type_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" />
+                        <field name="message_ids" widget="mail_thread" />
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="capex_april_view_search" model="ir.ui.view">
+            <field name="name">budget.capex.april.search</field>
+            <field name="model">capex.april.line</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="account_id" />
+                    <group string="Group By">
+                        <filter name="group_by_capex" string="Capex" context="{'group_by': 'capex_id'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="capex_april_action" model="ir.actions.act_window">
+            <field name="name">Capex April</field>
+            <field name="res_model">capex.april.line</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create a Capex April Line!</p>
+            </field>
+        </record>
+
+        <menuitem id="capex_april_menu" name="Capex April" parent="accounting_budget_extension_V7.menu_capex_line" action="capex_april_action" sequence="10" />
+
+        <!-- Capex May Line -->
+        <record id="capex_may_view_tree" model="ir.ui.view">
+            <field name="name">budget.capex.may.tree</field>
+            <field name="model">capex.may.line</field>
+            <field name="arch" type="xml">
+                <tree string="Capex May Tree">
+                    <field name="account_id" />
+                    <field name="capex_id"/>
+                    <field name="actual_amount" sum="Total" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="capex_may_view_form" model="ir.ui.view">
+            <field name="name">budget.capex.may.form</field>
+            <field name="model">capex.may.line</field>
+            <field name="arch" type="xml">
+                <form string="Capex May Form">
+                    <sheet>
+                        <group>
+                            <group name="budget_informations">
+                                <field name="account_id" required="1"/>
+                                <field name="capex_id"/>
+                            </group>
+                            <group name="total_left">
+                                <field name="from_date"/>
+                                <field name="to_date"/>
+                            </group>
+                            <group name="misc">
+                                <field name="actual_amount" />
+                            </group>
+                            <group name="total_right">
+                                <field name="type_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" />
+                        <field name="message_ids" widget="mail_thread" />
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="capex_may_view_search" model="ir.ui.view">
+            <field name="name">budget.capex.may.search</field>
+            <field name="model">capex.may.line</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="account_id" />
+                    <group string="Group By">
+                        <filter name="group_by_capex" string="Capex" context="{'group_by': 'capex_id'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="capex_may_action" model="ir.actions.act_window">
+            <field name="name">Capex May</field>
+            <field name="res_model">capex.may.line</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create a Capex May Line!</p>
+            </field>
+        </record>
+
+        <menuitem id="capex_may_menu" name="Capex May" parent="accounting_budget_extension_V7.menu_capex_line" action="capex_may_action" sequence="11" />
+
+        <!-- Capex June Line -->
+        <record id="capex_june_view_tree" model="ir.ui.view">
+            <field name="name">budget.capex.june.tree</field>
+            <field name="model">capex.june.line</field>
+            <field name="arch" type="xml">
+                <tree string="Capex June Tree">
+                    <field name="account_id" />
+                    <field name="capex_id"/>
+                    <field name="actual_amount" sum="Total" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="capex_june_view_form" model="ir.ui.view">
+            <field name="name">budget.capex.june.form</field>
+            <field name="model">capex.june.line</field>
+            <field name="arch" type="xml">
+                <form string="Capex June Form">
+                    <sheet>
+                        <group>
+                            <group name="budget_informations">
+                                <field name="account_id" required="1"/>
+                                <field name="capex_id"/>
+                            </group>
+                            <group name="total_left">
+                                <field name="from_date"/>
+                                <field name="to_date"/>
+                            </group>
+                            <group name="misc">
+                                <field name="actual_amount" />
+                            </group>
+                            <group name="total_right">
+                                <field name="type_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" />
+                        <field name="message_ids" widget="mail_thread" />
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="capex_june_view_search" model="ir.ui.view">
+            <field name="name">budget.capex.june.search</field>
+            <field name="model">capex.june.line</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="account_id" />
+                    <group string="Group By">
+                        <filter name="group_by_capex" string="Capex" context="{'group_by': 'capex_id'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="capex_june_action" model="ir.actions.act_window">
+            <field name="name">Capex June</field>
+            <field name="res_model">capex.june.line</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create a Capex June Line!</p>
+            </field>
+        </record>
+
+        <menuitem id="capex_june_menu" name="Capex June" parent="accounting_budget_extension_V7.menu_capex_line" action="capex_june_action" sequence="12" />
+
+    </data>
+</odoo>

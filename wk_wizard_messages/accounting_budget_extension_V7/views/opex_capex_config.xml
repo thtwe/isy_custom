@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <menuitem id="opex_capex_config" name="Configuration" parent="accounting_budget_extension_V7.menu_financial_report_root" sequence="10" />
+
+        <record id="budget_opex_type_tree" model="ir.ui.view">
+            <field name="name">budget.opex.type.tree</field>
+            <field name="model">budget.opex.type</field>
+            <field name="arch" type="xml">
+                <tree string="Opex Type Tree" default_order="sequence" editable="top">
+                    <field name="name" required="1" />
+                    <field name="sequence" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="budget_opex_type_action" model="ir.actions.act_window">
+            <field name="name">Opex Type</field>
+            <field name="res_model">budget.opex.type</field>
+            <field name="view_mode">tree</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create an Opex type!</p>
+            </field>
+        </record>
+
+        <menuitem id="opex_type_menu" name="Opex Type" parent="accounting_budget_extension_V7.opex_capex_config" action="budget_opex_type_action" sequence="1" />
+
+        <record id="budget_capex_type_tree" model="ir.ui.view">
+            <field name="name">budget.capex.type.tree</field>
+            <field name="model">budget.capex.type</field>
+            <field name="arch" type="xml">
+                <tree string="Capex Type Tree" default_order="sequence" editable="top">
+                    <field name="name" required="1" />
+                    <field name="sequence" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="budget_capex_type_action" model="ir.actions.act_window">
+            <field name="name">Capex Type</field>
+            <field name="res_model">budget.capex.type</field>
+            <field name="view_mode">tree</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create an Capex type!</p>
+            </field>
+        </record>
+
+        <menuitem id="capex_type_menu" name="Capex Type" parent="accounting_budget_extension_V7.opex_capex_config" action="budget_capex_type_action" sequence="2" />
+
+
+    </data>
+</odoo>
