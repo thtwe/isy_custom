@@ -1,0 +1,97 @@
+<odoo>
+    <menuitem id="menu_budget_template_root" name="Budget (21 - 22)" groups="base.group_no_one" parent="account_accountant.menu_accounting" sequence="6"/>
+    <menuitem id="menu_financial_report_root" name="Financial Reports (21 - 22)" groups="account.group_account_manager" parent="account_accountant.menu_accounting" sequence="5"/>
+
+    <record id="budget_view_form" model="ir.ui.view">
+        <field name="name">budget.form</field>
+        <field name="model">budgetextension.budget</field>
+        <field name="arch" type="xml">
+            <form string="Budget Form">
+                <header>
+                    <button type="object" class="oe_stat_button" name="update_planned_amount" string="Update Budget"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <h1><field name="name" placeholder="e.g. 3200 Budget"/></h1>
+                    <group>
+                        <group name="budget_informations">
+                            <field name="active" invisible='1'/>
+                            <field name="account_id"/>
+                            <field name="tax_currency_rate" invisible='1'/>
+                            <!--<field name="category_id"/>-->
+                            <field name="planned_amount" string='Allowed Amount' readonly="budget_template == True and no_overwrite == False"/>
+                            <field name="ccm_budget_percent" string="CCM Budget Percent" invisible="1"/>
+                            <field name="planned_amount_revised" string="Planned Amount (Revised) [CCM]"/>
+                            <field name="planned_amount_revised_neg" string="Planned Amount (Revised)" invisible="1"/>
+                            <field name="practical_amount"/>
+                            <field name="planned_amount_100" readonly="budget_template == True and no_overwrite == False" string='Planned Amount [Board]'/>
+                            <field name="different_amount"/>
+                            <field name="x_studio_type" string="Type"/>
+                            <field name="proposed_amount" invisible='1'/>
+                            <field name="x_studio_variance__1" string="Variance (%)" invisible='1'/>
+                            <field name="percentage" invisible='1'/>                        
+                        </group>
+                        <group name="budget_dates">
+                            <field name="x_studio_group" string="Group"/>
+                            <field name="start_date"/>
+                            <field name="end_date"/> 
+                            <field name="budget_template"/>
+                            <field name="no_overwrite" string="No Overwrite from Template"/>
+                            <field name="x_line_total" invisible="1"/>
+                            <field name="x_variance"/>
+                            <field name="x_studio_note" string="Note"/>
+                            <field name="x_last_year_planned_amount_100" groups="base.group_no_one"/> 
+                        </group>
+                        <group name="budget_history">
+                                <field name="last_2_year_planned_amount"/>
+                                <field name="last_2_year_practical_amount"/>
+                                <field name="last_2_year_variance_amount"/>
+                                <field name="last_year_planned_amount"/>
+                                <field name="last_year_planned_amount_100" string="Last Year Planned Amount (100)"/>
+                                <field name="last_year_practical_amount"/>
+                                <field name="last_year_practical_amount_neg" invisible="1"/>
+                                <field name="last_year_variance_amount" invisible='1'/>
+                                <field name="create_date" groups='base.group_no_one'/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                  <field name="message_follower_ids" widget="mail_followers"/>
+                  <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="budget_view_graph" model="ir.ui.view">
+        <field name="name">budget.graph</field>
+        <field name="model">budgetextension.budget</field>
+        <field name="arch" type="xml">
+            <graph string="Planned amount by accounts">
+                <field name="account_id"/>
+                <field name="planned_amount" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="budget_view_search" model="ir.ui.view">
+        <field name="name">budget.search</field>
+        <field name="model">budgetextension.budget</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="account_id"/>
+                <field name="name"/>
+                <field name="planned_amount"/>
+                <field name="practical_amount"/>
+                <field name="different_amount"/>
+                <filter name="this_fiscal_year" string="This fiscal year" domain="[('state','=','2')]"/>
+                <filter name="past_fiscal_year" string="Past fiscal years" domain="[('state','=','1')]"/>
+                <filter name="future_fiscal_year" string="Future fiscal years" domain="[('state','=','3')]"/>
+                <group string="Group By">
+                    <filter name="group_by_account_id" string="Account" context="{'group_by': 'account_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+</odoo>

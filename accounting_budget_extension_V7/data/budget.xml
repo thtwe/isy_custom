@@ -1,0 +1,19 @@
+<odoo noupdate="0">
+    <record id="ir_cron_scheduler_budgetextension_budget" model="ir.cron">
+        <field name="name">Extended Budgets Scheduler</field>
+        <field eval="True" name="active" />
+        <field name="user_id" ref="base.user_root" />
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="model_id" ref="model_budgetextension_budget" />
+        <field name="state">code</field>
+        <field name="code">
+model._cron_compute_state()
+
+env['payroll.budget']._cron_compute_state_payroll()
+env['capital.budget.template']._cron_compute_state_capital()
+env['revenue.budget.ygn']._cron_compute_state_revenue()
+        </field>
+    </record>
+</odoo>

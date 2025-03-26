@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data noupdate="0">
+    <!-- KMS Update (02/10/2020) -->
+    <record id="group_extended_budget_manager" model="res.groups">
+        <field name="name">Extended Budget Manager</field>
+        <field name="comment">Allow the user to extended budget</field>
+    </record>
+    <!-- END -->
+</data>
+</odoo>

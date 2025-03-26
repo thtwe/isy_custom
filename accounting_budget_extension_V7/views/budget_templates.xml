@@ -1,0 +1,914 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <!-- Sub-menu -->
+        <menuitem id="menu_revenue_budget_root" name="Revenue Budget" parent="accounting_budget_extension_V7.menu_budget_template_root" sequence="4"/>
+        <menuitem id="menu_payroll_budget_root" name="Payroll Budget" parent="accounting_budget_extension_V7.menu_budget_template_root" sequence="5"/>
+        <menuitem id="menu_rental_budget_root" name="Rental Budget" parent="accounting_budget_extension_V7.menu_budget_template_root" sequence="6"/>
+
+        <!-- Capital Budget Tree View -->
+        <record id="capital_budget_template_view_tree" model="ir.ui.view">
+            <field name="name">capital.budget.template.tree</field>
+            <field name="model">capital.budget.template</field>
+            <field name="arch" type="xml">
+                <tree string="Capital Budget Tree">
+                    <field name="name" string="Budget"/>
+                    <field name="last_2_year_planned_amount" invisible="1" string="19-20 Budget (A)" sum="Total"/>
+                    <field name="last_year_planned_amount" invisible="1" string="20-21 Budget (B)" sum="Total"/>
+                    <field name="planned_amount" invisible="1" string="21-22 Budget (C)" sum="Total"/>
+                    <field name="last_2_year_planned_amount_neg" string="19-20 Budget (A)" sum="Total"/>
+                    <field name="last_year_planned_amount_neg" string="20-21 Budget (B)" sum="Total"/>
+                    <field name="planned_amount_neg" string="21-22 Budget (C)" sum="Total"/>
+                    <field name="variance" string="Variance (D-C)" sum="Total"/>
+                    <!-- <field name="variance_percentage"/> -->
+                </tree>
+            </field>
+        </record>
+
+        <!-- Capital Budget Form View -->
+        <record id="capital_budget_template_view_form" model="ir.ui.view">
+            <field name="name">capital.budget.template.form</field>
+            <field name="model">capital.budget.template</field>
+            <field name="arch" type="xml">
+                <form string="Budget Form">
+                    <sheet>
+                        <h1>
+                            <field name="name" placeholder="e.g. Application Fees" required="1"/>
+                        </h1>
+                        <group>
+                            <group name="budget_info">
+                                <field name="planned_amount" string="21-22 Budget (C)"/>
+                                <field name="last_year_planned_amount" string="20-21 Budget (B)"/>
+                                <field name="last_2_year_planned_amount" string="19-20 Budget (A)"/>
+                            </group>
+                            <group name="calculations">
+                                <field name="contingency_amount"/>
+                                <field name="contingency_percentage"/>
+                                <field name="line_total"/>
+                            </group>
+                            <group name="application">
+                                <field name="is_application"/>
+                                <field name="is_enrollment"/>
+                                <field name="is_reserve"/>
+                            </group>
+                            <group name="misc">
+                                <field name="type_id"/>
+                                <field name="from_date"/>
+                                <field name="to_date"/>
+                            </group>
+                            <group name="application_fee" invisible="is_application == False">
+                                <field name="application_fee"/>
+                            </group>
+                            <group name="enrollment_fee" invisible="is_enrollment == False">
+                                <field name="enrollment_fee"/>
+                            </group>
+                            <group name="reserve" invisible="is_reserve == False">
+                                <field name="current_income" string="This Year Income Budget (E)"/>
+                                <field name="previous_income" string="Next Year Income Budget (D)"/>
+                                <field name="current_year_reserve" string="20% of (D-E)"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Capital Budget Lines" name="payroll_lines">
+                                <field name="capital_line_ids" nolable="1">
+                                    <tree string="Capital Budget Lines" editable="bottom">
+                                        <field name="name" string="Description"/>
+                                        <field name="total"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Capital Budget Search View -->
+        <record id="capital_budget_template_view_search" model="ir.ui.view">
+            <field name="name">capital.budget.template.search</field>
+            <field name="model">capital.budget.template</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="type_id"/>
+                    <group string="Group By">
+                        <filter name="group_by_type" string="Type" context="{'group_by': 'type_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Capital Budget View Action -->
+        <record id="capital_budget_template_action" model="ir.actions.act_window">
+            <field name="name">Capital Budget</field>
+            <field name="res_model">capital.budget.template</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_group_by_type': 1}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create a capital budget!</p>
+            </field>
+        </record>
+
+        <!-- Payroll Buget Menu -->
+        <menuitem id="menu_capital_budget" name="Capital Budget" parent="accounting_budget_extension_V7.menu_budget_template_root" action="capital_budget_template_action" sequence="3"/>
+
+        <!-- Extended Budget for Current Year -->
+        <record id="budget_current_view_tree" model="ir.ui.view">
+            <field name="name">budget.current.tree</field>
+            <field name="model">budgetextension.budget</field>
+            <field name="arch" type="xml">
+                <tree string="Budget Current Tree">
+                    <field name="name"/>
+                    <field name="account_id"/>
+                    <!-- <field name="x_last_2_year_planned_amount" widget="integer" string="18 - 19 Budget (A)" sum="Total"/>
+                    <field name="x_last_2_year_practical_amount" widget="integer" string="18 - 19 Actual (B)" sum="Total"/>
+                    <field name="x_last_year_planned_amount_100" widget="integer" string="19 - 20 Budget (C)" sum="Total"/> -->
+                    <field name="last_year_practical_amount_neg" widget="integer" string="19 - 20 Actual (D)" sum="Total"/>
+                    <field name="x_planned_amount" widget="integer" string="20 - 21 Budget (E)" sum="Total"/>
+                    <field name="planned_amount_revised_neg" widget="integer" string="20 - 21 Budget [REVISED] (F)" sum="Total"/>
+                    <field name="last_year_variance_amount" string="Variance (E - C)" widget="integer" sum="Total"/>
+
+                </tree>
+            </field>
+        </record>
+
+        <record id="budget_current_view_form" model="ir.ui.view">
+            <field name="name">budget.current.form</field>
+            <field name="model">budgetextension.budget</field>
+            <field name="arch" type="xml">
+                <form string="Budget Form">
+                    <header>
+                        <button type="object" class="oe_stat_button" name="update_planned_amount" string="Update Budget"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <h1>
+                            <field name="name" placeholder="e.g. 3200 Budget"/>
+                        </h1>
+                        <group>
+                            <group name="budget_informations">
+                                <field name="account_id"/>
+                                <!--<field name="category_id"/>-->
+                                <field name="planned_amount" string="Allowed Amount"/>
+                                <field name="ccm_budget_percent"/>
+                                <field name="planned_amount_revised" string="Planned Amount (Revised) [CCM]"/>
+                                <field name="planned_amount_100" string="Planned Amount [Board]"/>
+                                <field name="practical_amount"/>
+                                <field name="different_amount"/>
+                                <field name="proposed_amount" invisible="1"/>
+                                <field name="percentage" invisible="1"/>
+                            </group>
+                            <group name="budget_dates">
+                                <field name="group_id"/>
+                                <field name="start_date"/>
+                                <field name="end_date"/>
+                                <field name="last_year_variance_amount"/>
+                            </group>
+                            <group name="budget_history">
+                                <field name="last_2_year_planned_amount"/>
+                                <field name="last_2_year_practical_amount"/>
+                                <field name="last_2_year_variance_amount"/>
+                                <field name="last_year_planned_amount"/>
+
+                                <field name="last_year_variance_amount"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="budget_current_view_search" model="ir.ui.view">
+            <field name="name">budget.current.search</field>
+            <field name="model">budgetextension.budget</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="account_id"/>
+                    <field name="name"/>
+                    <field name="planned_amount"/>
+                    <field name="practical_amount"/>
+                    <field name="different_amount"/>
+                    <filter name="this_fiscal_year" string="Current Year" domain="[('state','=','2')]"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="budget_current_action" model="ir.actions.act_window">
+            <field name="name">Extended Budgets (Current Year)</field>
+            <field name="res_model">budgetextension.budget</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="budget_current_view_tree"/>
+            <field name="context" eval="{'search_default_this_fiscal_year': 1}"/>
+            <field name="search_view_id" ref="budget_current_view_search"/>
+        </record>
+
+    <record id="budget_view_tree" model="ir.ui.view">
+        <field name="name">budget.tree</field>
+        <field name="model">budgetextension.budget</field>
+        <field name="arch" type="xml">
+            <tree string="Budget Tree" decoration-danger="state==1" decoration-info="state==3">
+                <field name="name" />
+                <field name="account_id" />
+                <field name="start_date" />
+                <field name="end_date" />
+                <field name="planned_amount" />
+                <field name="last_year_planned_amount"/>
+                <field name="different_amount"/>
+                <field name="practical_amount"/>
+                <field name="state" invisible="1" />
+            </tree>
+        </field>
+    </record>
+
+    <!-- <record id="budget_view_form" model="ir.ui.view">
+        <field name="name">budget.form</field>
+        <field name="model">budgetextension.budget</field>
+        <field name="arch" type="xml">
+            <form string="Budget Form" >
+                <header>
+                    <field name="state" widget="statusbar" />
+                </header>
+                <sheet>
+                    <h1><field name="name" placeholder="e.g. 3200 Budget"/></h1>
+                    <group>
+                        <group name="budget_informations">
+                            <field name="account_id" />
+                            <field name="planned_amount"/>
+                            <field name="last_year_planned_amount"/>
+                            <field name="different_amount"/>
+                            <field name="practical_amount"/>
+                        </group>
+                        <group name="budget_dates">
+                            <field name="start_date" />
+                            <field name="end_date" />
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record> -->
+
+    <record id="budget_view_graph" model="ir.ui.view">
+        <field name="name">budget.graph</field>
+        <field name="model">budgetextension.budget</field>
+        <field name="arch" type="xml">
+            <graph string="Planned amount by accounts">
+                <field name="account_id" />
+                <field name="planned_amount" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+
+        <record id="budget_current_view_tree_action" model="ir.actions.act_window.view">
+            <field eval="0" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="budget_current_view_tree"/>
+            <field name="act_window_id" ref="budget_current_action"/>
+        </record>
+
+        <record id="budget_current_view_form_action" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="budget_current_view_form"/>
+            <field name="act_window_id" ref="budget_current_action"/>
+        </record>
+
+        <menuitem id="budget_current_menu" name="Extended Budget (Current)" parent="accounting_budget_extension_V7.menu_budget_template_root" action="budget_current_action" sequence="2"/>
+
+        <!-- Revenue YGN Tree View -->
+        <record id="revenue_budget_ygn_view_tree" model="ir.ui.view">
+            <field name="name">revenue.budget.ygn.tree</field>
+            <field name="model">revenue.budget.ygn</field>
+            <field name="arch" type="xml">
+                <tree string="Revenue Budget (YGN) Tree" editable="top">
+                    <field name="budget_id" required="1"/>
+                    <field name="current_year_student" string="19-20 Student"/>
+                    <field name="current_year_fee" string="19-20 Fee"/>
+                    <field name="current_year_total" string="19-20 Total" sum="Total"/>
+                    <field name="percentage" string="%"/>
+                    <field name="next_year_student" string="20-21 Student"/>
+                    <field name="next_year_fee" string="20-21 Fee"/>
+                    <field name="next_year_total" string="20-21 Total" sum="Total"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Revenue YGN Search View -->
+        <record id="revenue_budget_ygn_view_search" model="ir.ui.view">
+            <field name="name">revenue.budget.ygn.search</field>
+            <field name="model">revenue.budget.ygn</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="budget_id"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- Revenue YGN View Action -->
+        <record id="revenue_budget_ygn_action" model="ir.actions.act_window">
+            <field name="name">Revenue Budget (YGN)</field>
+            <field name="res_model">revenue.budget.ygn</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create a Yangon revenue budget!</p>
+            </field>
+        </record>
+
+        <!-- Revenue YGN Menu -->
+        <menuitem id="menu_revenue_budget_ygn" name="Revenue Budget (YGN)" parent="accounting_budget_extension_V7.menu_revenue_budget_root" action="revenue_budget_ygn_action" sequence="1"/>
+
+        <!-- Revenue Budget NPT Tree View -->
+        <record id="revenue_budget_npt_view_tree" model="ir.ui.view">
+            <field name="name">revenue.buget.npt.tree</field>
+            <field name="model">revenue.budget.npt</field>
+            <field name="arch" type="xml">
+                <tree string="Revenue Budget (NPT) Tree">
+                    <field name="budget_id"/>
+                    <field name="contingency_percentage"/>
+                    <field name="budget_amount"/>
+                    <field name="from_date"/>
+                    <field name="to_date"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Revenue Budget NPT Form View -->
+        <record id="revenue_budget_npt_view_form" model="ir.ui.view">
+            <field name="name">revenue.budget.npt.form</field>
+            <field name="model">revenue.budget.npt</field>
+            <field name="arch" type="xml">
+                <form string="Budget Form">
+                    <sheet>
+                        <h1>
+                            <field name="name" placeholder="e.g. Revenue Budget (NPT)" required="1"/>
+                        </h1>
+                        <group>
+                            <group name="budget_info">
+                                <field name="budget_id"/>
+                                <field name="budget_amount"/>
+                            </group>
+                            <group name="dates">
+                                <field name="from_date"/>
+                                <field name="to_date"/>
+                            </group>
+                            <group name="calculations">
+                                <field name="contingency_amount"/>
+                                <field name="contingency_percentage"/>
+                                <field name="line_total"/>
+                            </group>
+                            <group name="total">
+                                <field name="budget_total"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Revenue Lines" name="revenue_npt_lines">
+                                <field name="revenue_npt_line_ids" nolable="1">
+                                    <tree string="Revenue Lines" editable="bottom">
+                                        <field name="name" string="Budget Grade"/>
+                                        <field name="student"/>
+                                        <field name="fee"/>
+                                        <field name="total"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Revenue Budget NPT Search View -->
+        <record id="revenue_budget_npt_view_search" model="ir.ui.view">
+            <field name="name">revenue.budget.npt.search</field>
+            <field name="model">revenue.budget.npt</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- Revenue Budget NPT View Action -->
+        <record id="revenue_budget_npt_action" model="ir.actions.act_window">
+            <field name="name">Revenue Budget (NPT)</field>
+            <field name="res_model">revenue.budget.npt</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create a NPT revenue budget!</p>
+            </field>
+        </record>
+
+        <!-- Revenue Buget NPT Menu -->
+        <menuitem id="menu_revenue_budget_npt" name="Revenue Budget (NPT)" parent="accounting_budget_extension_V7.menu_revenue_budget_root" action="revenue_budget_npt_action" sequence="2"/>
+
+        <!-- Payroll Budget Tree View -->
+        <record id="payroll_budget_view_tree" model="ir.ui.view">
+            <field name="name">payroll.buget.tree</field>
+            <field name="model">payroll.budget</field>
+            <field name="arch" type="xml">
+                <tree string="Payroll Budget Tree">
+                    <field name="name"/>
+                    <field name="base_budget_amount" sum="Total"/>
+                    <field name="retirement_budget_amount" sum="Total"/>
+                    <field name="provident_fund_budget_amount" sum="Total"/>
+                    <field name="gratuity_budget_amount" sum="Total"/>
+                    <field name="contingency_percentage"/>
+                    <field name="from_date"/>
+                    <field name="to_date"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Payroll Budget Form View -->
+        <record id="payroll_budget_view_form" model="ir.ui.view">
+            <field name="name">payroll.budget.form</field>
+            <field name="model">payroll.budget</field>
+            <field name="arch" type="xml">
+                <form string="Budget Form">
+                    <sheet>
+                        <h1>
+                            <field name="name" placeholder="e.g. Security Guards" required="1"/>
+                        </h1>
+                        <group>
+                            <group name="budget_info">
+                                <field name="budget_id"/>
+                                <field name="base_budget_amount"/>
+                                <field name="retirement_budget_id"/>
+                                <field name="retirement_budget_amount"/>
+                                <field name="provident_fund_budget_id"/>
+                                <field name="provident_fund_budget_amount"/>
+                                <field name="gratuity_budget_id"/>
+                                <field name="gratuity_budget_amount"/>
+                                <field name="gratuity_budget_percent" string="Gratuity Line Percentage" readonly="1"/>
+                            </group>
+                            <group name="totals">
+                                <field name="contingency_amount"/>
+                                <field name="contingency_percentage"/>
+                            </group>
+                            <group name="dates">
+                                <field name="from_date"/>
+                                <field name="to_date"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Payroll Lines" name="payroll_lines">
+                                <field name="payroll_line_m_ids" nolable="1">
+                                    <tree string="Payroll Lines" editable="bottom">
+                                        <!-- MT-->
+                                        <field name="employee_id"/>
+                                        <!-- MT DONE-->
+                                        <field name="employee" required="1"/>
+                                        <field name="position"/>
+                                        <field name="employee_type" required="1"/>
+                                        <field name="budget_id" string="Budget"/>
+                                        <!-- KMS Update (29/9/2020) -->
+                                        <field name="current_year_base" string="20-21 Base (A)" readonly="1" sum="Total"/>
+                                        <!-- END -->
+                                        <field name="retirement_percentage" string="Retirement % (B)" force_save="True" readonly="employee_type == 'local' or employee_type == False"/>
+                                        <field name="provident_fund_percentage" string="Provident Fund % (C)" force_save="True" readonly="employee_type == 'expatriate' or employee_type == False"/>
+                                        <field name="current_year_retirement" string="20-21 Retirement (D=A*B)" sum="Total"/>
+                                        <field name="current_year_provident_fund" string="20-21 Provident Fund (E=A*C)" sum="Total"/>
+                                        <field name="current_year_budget" string="20-21 Budget (F=A+D|E)" sum="Total"/>
+                                        <!-- KMS Update -->
+                                        <field name="current_year_allowance" string="20 - 21 Allowance (Z)" sum="Total" readonly="employee_type == 'expatriate' or employee_type == False" />
+                                        <field name="current_year_tax_amount" string="20 - 21 Tax (X)" sum="Total" readonly="employee_type == 'expatriate' or employee_type == False" />
+                                        <!-- END -->
+                                        <!-- KMS Update (29/9/2020) -->
+                                        <field name="next_year_origin" string="21 - 22 Origin (G)" />
+                                        <!-- END -->
+                                        <field name="inflation" string="Inflation % (H)"/>
+                                        <field name="next_year_base" string="21-22 Base (I=G+(G*H)" force_save="True" readonly="1" sum="Total"/>
+                                        <field name="additional_stipend" string="Additional Stipend % (J)"/>
+                                        <field name="next_year_base_additional" string="21-22 Base (Additional) (K=I+(I*J))" sum="Total"/>
+                                        <field name="next_year_retirement" string="21-22 Retirement (L=I*B)" sum="Total"/>
+                                        <field name="next_year_provident_fund" string="21-22 Provident Fund (M=I*C)" sum="Total"/>
+                                        <!-- MT-->
+                                        <field name="next_year_allowance" string="21-22 Allowance (N)" sum="Total" force_save="True" readonly="1" />
+                                        <field name="next_year_gratuity_m" string="21-22 Gratuity (O=(N+K)*(Graduity Budget Percent/100))" sum="Total" force_save="True" readonly="1" />
+                                        <field name="next_year_tax_amount" string="21-22 Tax (P)" sum="Total" force_save="True" readonly="1" />
+                                        <field name="next_year_net_income" string="21-22 Net Income (Q=(I+N+O)-P)" sum="Total" force_save="True" readonly="1" />
+                                        <field name="next_year_net_income_provident_fund" string="21-22 Net Income Provident Fund (R=M+Q)" sum="Total" invisible="1" force_save="True" readonly="1" />
+                                        <!-- MT DONE-->
+                                        <!-- KMS Update -->
+                                        <field name="current_year_net_budget" string="20 - 21 Net Budget (Y=F+20-21 Gratuity+Z)" sum="Total" readonly="1" />
+                                        <!-- END -->
+                                        <field name="next_year_budget" string="21-22 Budget (S=K+L|K+M+N+O)" sum="Total"/>
+
+
+                                        <!-- KMS Update -->
+                                        <field name="variance" string="Variance (T=((S-P)-(Y-X))" sum="Total"/>
+                                        <!-- END -->
+                                  </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Payroll Budget Search View -->
+        <record id="payroll_budget_view_search" model="ir.ui.view">
+            <field name="name">payroll.budget.search</field>
+            <field name="model">payroll.budget</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- Payroll Budget View Action -->
+        <record id="payroll_budget_action" model="ir.actions.act_window">
+            <field name="name">Payroll Budget</field>
+            <field name="res_model">payroll.budget</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create a payroll budget!</p>
+            </field>
+        </record>
+
+        <!-- Payroll Buget Menu -->
+        <menuitem id="menu_payroll_budget" name="Payroll Budget" parent="accounting_budget_extension_V7.menu_payroll_budget_root" action="payroll_budget_action" sequence="1"/>
+
+        <!-- Payroll Budget Line for Manipulation Tree View -->
+        <record id="payroll_budget_line_m_view_tree" model="ir.ui.view">
+            <field name="name">payroll.buget.line.m.budget.tree</field>
+            <field name="model">payroll.budget.line.m</field>
+            <field name="arch" type="xml">
+                <tree string="Payroll Budget Line for Manipulation Tree" create="false">
+                    <field name="employee" required="1"/>
+                    <field name="position"/>
+                    <field name="employee_type"/>
+                    <field name="budget_id" string="Budget"/>
+                    <field name="current_year_base" string="20-21 Base (A)" sum="Total"/>
+                    <field name="retirement_percentage" string="Retirement % (B)"/>
+                    <field name="provident_fund_percentage" string="Provident Fund % (C)"/>
+                    <field name="current_year_retirement" string="20-21 Retirement (D=A*B)" sum="Total"/>
+                    <field name="current_year_provident_fund" string="20-21 Provident Fund (E=A*C)" sum="Total"/>
+                    <field name="current_year_budget" string="20-21 Budget (F=A+D|E)" sum="Total"/>
+                    <field name="next_year_origin" string="21 - 22 Origin (G)"/>
+                    <field name="inflation" string="Inflation (H)"/>
+                    <field name="next_year_base" string="21-22 Base (I=G+(G*H)" sum="Total"/>
+                    <field name="additional_stipend" string="Additional Stipend (J)"/>
+                    <field name="next_year_base_additional" string="21-22 Base (Additional) (K=I+(I*J))" sum="Total"/>
+                    <field name="next_year_retirement" string="21-22 Retirement (L=I*B)" sum="Total"/>
+                    <field name="next_year_provident_fund" string="21-22 Provident Fund (M=I*C)" sum="Total"/>
+                    <field name="next_year_budget" string="21-22 Budget (N=K+L|M)" sum="Total"/>
+                    <field name="variance" string="Variance (N-F)" sum="Total"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Payroll Line For Manipulation Form View -->
+        <record id="payroll_line_for_m_view_form" model="ir.ui.view">
+            <field name="name">payroll.buget.line.m.budget.form</field>
+            <field name="model">payroll.budget.line.m</field>
+            <field name="arch" type="xml">
+                <form string="Payroll Line for Manipulation Form">
+                    <sheet>
+                        <h1>
+                            <field name="employee" required="1"/>
+                        </h1>
+                        <group>
+                            <group name="group_1">
+                                <field name="position"/>
+                                <field name="employee_type"/>
+                                <field name="budget_id" string="Budget"/>
+                                <field name="current_year_base" string="20-21 Base (A)" sum="Total"/>
+                                <field name="retirement_percentage" string="Retirement % (B)"/>
+                                <field name="provident_fund_percentage" string="Provident Fund % (C)"/>
+                                <field name="current_year_retirement" string="20-21 Retirement (D=A*B)" sum="Total"/>
+                                <field name="current_year_provident_fund" string="20-21 Provident Fund (E=A*C)" sum="Total"/>
+                                <field name="current_year_budget" string="20-21 Budget (F=A+D|E)" sum="Total"/>
+                            </group>
+                            <group name="group_2">
+                                <field name="next_year_origin" string="21 - 22 Origin (G)"/>
+                                <field name="inflation" string="Inflation (H)"/>
+                                <field name="next_year_base" string="21-22 Base (I=G+(G*H)" sum="Total"/>
+                                <field name="additional_stipend" string="Additional Stipend (J)"/>
+                                <field name="next_year_base_additional" string="21-22 Base (Additional) (K=I+(I*J))" sum="Total"/>
+                                <field name="next_year_retirement" string="21-22 Retirement (L=I*B)" sum="Total"/>
+                                <field name="next_year_provident_fund" string="21-22 Provident Fund (M=I*C)" sum="Total"/>
+                                <field name="next_year_budget" string="21-22 Budget (N=K+L|M)" sum="Total"/>
+                                <field name="variance" string="Variance (N-F)" sum="Total"/>
+                            </group>
+                        </group>
+                    </sheet>
+
+                </form>
+            </field>
+        </record>
+
+        <!-- Payroll Budget Line for Manipulation Search View -->
+        <record id="payroll_budget_line_m_view_search" model="ir.ui.view">
+            <field name="name">payroll.buget.line.m.budget.search</field>
+            <field name="model">payroll.budget.line.m</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="employee"/>
+                    <field name="position"/>
+                    <field name="employee_type"/>
+                    <filter name="local_employee" string="Local" domain="[('employee_type','=', 'local')]"/>
+                    <filter name="expatriate_employee" string="Expatriate" domain="[('employee_type','=', 'expatriate')]"/>
+                    <group string="Group By">
+                        <filter name="group_by_position" string="Position" context="{'group_by': 'position'}"/>
+                        <filter name="group_by_type" string="Type" context="{'group_by': 'employee_type'}"/>
+                        <filter name="group_by_budget" string="Budget" context="{'group_by': 'budget_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Payroll Budget Line for Manipulation View Action -->
+        <record id="payroll_budget_line_m_action" model="ir.actions.act_window">
+            <field name="name">Payroll Budget Line</field>
+            <field name="res_model">payroll.budget.line.m</field>
+            <field name="view_mode">tree</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create a line!</p>
+            </field>
+        </record>
+
+        <!-- Payroll Buget Line for Manipulation Menu -->
+        <menuitem id="menu_payroll_budget_line_m" name="Payroll Budget Line" parent="accounting_budget_extension_V7.menu_payroll_budget_root" action="payroll_budget_line_m_action" sequence="2"/>
+
+        <!-- Allowance Tree View -->
+        <record id="allowance_budget_view_tree" model="ir.ui.view">
+            <field name="name">allowance.budget.tree</field>
+            <field name="model">allowance.budget</field>
+            <field name="arch" type="xml">
+                <tree string="Allowance Budget Tree" editable="top">
+                    <field name="budget_id" required="1"/>
+                    <field name="parent_budget_id" domain="[('state','=','3')]"/>
+                    <field name="employee_count"/>
+                    <field name="allowance"/>
+                    <field name="total" sum="Total"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Allowance Search View -->
+        <record id="allowance_budget_view_search" model="ir.ui.view">
+            <field name="name">allowance.budget.search</field>
+            <field name="model">allowance.budget</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="budget_id"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- Allowance View Action -->
+        <record id="allowance_budget_action" model="ir.actions.act_window">
+            <field name="name">Allowance Budget</field>
+            <field name="res_model">allowance.budget</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create an allowance budget!</p>
+            </field>
+        </record>
+
+        <!-- Allowance Menu -->
+        <menuitem id="menu_allowance_budget" name="Allowance Budget" parent="accounting_budget_extension_V7.menu_payroll_budget_root" action="allowance_budget_action" sequence="3"/>
+
+        <!-- Payroll Budget Line (Master) Tree View -->
+        <record id="payroll_budget_line_master_view_tree" model="ir.ui.view">
+            <field name="name">payroll.buget.line.master.budget.tree</field>
+            <field name="model">payroll.budget.line.master</field>
+            <field name="arch" type="xml">
+                <tree string="Payroll Budget Line (Master) Tree" editable="top">
+                    <field name="employee_id" required="1"/>
+                    <field name="position"/>
+                    <field name="employee_type"/>
+                    <field name="budget_id" string="Budget"/>
+                    <field name="current_year_base" string="19-20 Base (A)" sum="Total"/>
+                    <field name="gratuity_percentage" string="Provident Fund (B)"/>
+                    <field name="current_year_gratuity" string="19-20 Provident Fund (C=A*B)" sum="Total"/>
+                    <field name="current_year_budget" string="19-20 Budget (D=A+C)" sum="Total"/>
+                    <field name="inflation" string="Inflation (E)"/>
+                    <field name="next_year_base" string="20-21 Base (F=A+(A*E)" sum="Total"/>
+                    <field name="additional_stipend" string="Additional Stipend (G)"/>
+                    <field name="next_year_base_additional" string="20-21 Base (Additional) (H=F+(F*G))" sum="Total"/>
+                    <field name="next_year_gratuity" string="20-21 Provident Fund (I=F*B)" sum="Total"/>
+                    <field name="next_year_budget" string="20-21 Budget (J=H+I)" sum="Total"/>
+                    <!-- <field name="variance" string="Variance (J-D)" sum="Total" /> -->
+                </tree>
+            </field>
+        </record>
+
+        <!-- Payroll Budget Line (Master) Search View -->
+        <record id="payroll_budget_line_master_view_search" model="ir.ui.view">
+            <field name="name">payroll.buget.line.master.budget.search</field>
+            <field name="model">payroll.budget.line.master</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="employee_id"/>
+                    <field name="position"/>
+                    <field name="employee_type"/>
+                    <filter name="local_employee" string="Local" domain="[('employee_type','=', 'local')]"/>
+                    <filter name="expatriate_employee" string="Expatriate" domain="[('employee_type','=', 'expatriate')]"/>
+                    <group string="Group By">
+                        <filter name="group_by_position" string="Position" context="{'group_by': 'position'}"/>
+                        <filter name="group_by_type" string="Type" context="{'group_by': 'employee_type'}"/>
+                        <filter name="group_by_budget" string="Budget" context="{'group_by': 'budget_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Payroll Budget Line (Master) View Action -->
+        <record id="payroll_budget_line_master_action" model="ir.actions.act_window">
+            <field name="name">Payroll Budget Line (Master)</field>
+            <field name="res_model">payroll.budget.line.master</field>
+            <field name="view_mode">tree</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create a line!</p>
+            </field>
+        </record>
+
+        <!-- Payroll Buget Line (Master) Menu -->
+        <menuitem id="menu_payroll_budget_line_master" name="Payroll Budget Line (Master)" parent="accounting_budget_extension_V7.menu_payroll_budget_root" action="payroll_budget_line_master_action" sequence="4"/>
+
+        <!-- Rental Budget Tree View -->
+        <record id="rental_budget_view_tree" model="ir.ui.view">
+            <field name="name">rental.buget.tree</field>
+            <field name="model">rental.budget</field>
+            <field name="arch" type="xml">
+                <tree string="Rental Budget Tree">
+                    <field name="name"/>
+                    <field name="budget_amount" sum="Total"/>
+                    <field name="from_date"/>
+                    <field name="to_date"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Rental Budget Form View -->
+        <record id="rental_budget_view_form" model="ir.ui.view">
+            <field name="name">rental.budget.form</field>
+            <field name="model">rental.budget</field>
+            <field name="arch" type="xml">
+                <form string="Budget Form">
+                    <sheet>
+                        <h1>
+                            <field name="name" placeholder="e.g. Expatriate Rental" required="1"/>
+                        </h1>
+                        <group>
+                            <group name="budget_info">
+                                <field name="budget_id"/>
+                                <field name="budget_amount"/>
+                            </group>
+                            <group name="totals">
+                                <field name="budget_total"/>
+                                <field name="contingency_amount"/>
+                                <field name="contingency_percentage"/>
+                                <field name="line_annual_total"/>
+                                <field name="acutal_rent_total"/>
+                            </group>
+                            <group name="dates">
+                                <field name="from_date"/>
+                                <field name="to_date"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Rental Lines" name="rental_lines">
+                                <field name="rental_line_ids" nolable="1">
+                                    <tree string="Rental Lines" editable="bottom">
+                                        <field name="employee_id" required="1"/>
+                                        <field name="categ_id"/>
+                                        <field name="monthly_allowance" sum="Total" readonly="1"/>
+                                        <field name="annual_allowance" sum="Total"/>
+                                        <field name="actual_monthly_rent" sum="Total"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Rental Budget Search View -->
+        <record id="rental_budgetview_search" model="ir.ui.view">
+            <field name="name">rental.buget.search</field>
+            <field name="model">rental.budget</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- Rental Budget View Action -->
+        <record id="rental_budget_action" model="ir.actions.act_window">
+            <field name="name">Rental Budget</field>
+            <field name="res_model">rental.budget</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create a rental budget!</p>
+            </field>
+        </record>
+
+        <!-- Rental Buget Menu -->
+        <menuitem id="menu_rental_budget" name="Rental Budget" parent="accounting_budget_extension_V7.menu_rental_budget_root" action="rental_budget_action" sequence="1"/>
+
+        <!-- Rental Budget Line Tree View -->
+        <record id="rental_budget_line_view_tree" model="ir.ui.view">
+            <field name="name">rental.buget.line.budget.tree</field>
+            <field name="model">rental.budget.line</field>
+            <field name="arch" type="xml">
+                <tree string="Rental Budget Line Tree" create="false">
+                    <field name="employee_id" required="1"/>
+                    <field name="categ_id"/>
+                    <field name="monthly_allowance" sum="Total" readonly="1"/>
+                    <field name="annual_allowance" sum="Total"/>
+                    <field name="actual_monthly_rent" sum="Total"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Rental Budget Line Search View -->
+        <record id="rental_budget_line_view_search" model="ir.ui.view">
+            <field name="name">rental.buget.line.budget.search</field>
+            <field name="model">rental.budget.line</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="employee_id"/>
+                    <field name="categ_id"/>
+                    <group string="Group By">
+                        <filter name="group_by_categ" string="Rental Category" context="{'group_by': 'categ_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Rental Budget Line View Action -->
+        <record id="rental_budget_line_action" model="ir.actions.act_window">
+            <field name="name">Rental Lines</field>
+            <field name="res_model">rental.budget.line</field>
+            <field name="view_mode">tree</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create a line!</p>
+            </field>
+        </record>
+
+        <!-- Rental Buget Line Menu -->
+        <!-- <menuitem id="menu_rental_budget_line" name="Rental Lines" parent="accounting_budget_extension_V7.menu_rental_budget_root" action="rental_budget_line_action" sequence="2" /> -->
+
+        <!-- Rental Budget Category Tree View -->
+        <record id="rental_budget_category_view_tree" model="ir.ui.view">
+            <field name="name">rental.budget.category.tree</field>
+            <field name="model">rental.budget.category</field>
+            <field name="arch" type="xml">
+                <tree string="Rental Budget Category Tree" editable="top">
+                    <field name="name" required="1"/>
+                    <field name="monthly_allowance"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Rental Budget Category Search View -->
+        <record id="rental_budget_category_view_search" model="ir.ui.view">
+            <field name="name">rental.budget.category.search</field>
+            <field name="model">rental.budget.category</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- Rental Buget Category View Action -->
+        <record id="rental_budget_category_action" model="ir.actions.act_window">
+            <field name="name">Rental Budget Category</field>
+            <field name="res_model">rental.budget.category</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create a category!</p>
+            </field>
+        </record>
+
+        <!-- Rental Budget Category Menu -->
+        <menuitem id="menu_rental_budget_category" name="Rental Category" parent="accounting_budget_extension_V7.menu_rental_budget_root" action="rental_budget_category_action" sequence="3"/>
+
+    </data>
+</odoo>
