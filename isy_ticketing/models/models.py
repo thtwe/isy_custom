@@ -599,7 +599,7 @@ class IsyTicketingRequests(models.Model):
 
         if vals.get('key_type')=='transportation':
             if not vals.get('start_time') or not vals.get('end_time') or vals.get('start_time')==0 or vals.get('end_time')==0:
-                raise UserError('Please choose Start Time (HH:MM:SS) and End Time (HH:MM:SS).')
+                raise UserError('Please choose Start Time (HH:MM) and End Time (HH:MM).')
             vals['state'] = 'waitingfordriverassign'
             vals['user_ids'] = list(set(self.env.ref('isy_ticketing.group_tnr_user').users.ids)-set(self.env.ref('isy_ticketing.group_tnr_manager').users.ids))
         elif vals.get('key_type') == 'maintenance':
@@ -646,8 +646,10 @@ class IsyTicketingRequests(models.Model):
         schedule_start_date = self.schedule_start_date
         schedule_end_date = self.schedule_end_date
         start_time, end_time = self.start_time, self.end_time
-        start_time_str = '{0:02.0f}:{1:02.0f}'.format(*divmod(float(self.start_time) / 60, 60))
-        end_time_str = '{0:02.0f}:{1:02.0f}'.format(*divmod(float(self.end_time) / 60, 60))
+        #start_time_str = '{0:02.0f}:{1:02.0f}'.format(*divmod(float(self.start_time) / 60, 60))
+        start_time_str = f"{int(self.start_time):02}:00"
+        end_time_str = f"{int(self.end_time):02}:00"
+        #end_time_str = '{0:02.0f}:{1:02.0f}'.format(*divmod(float(self.end_time) / 60, 60))
         lst_reserved = []
         dict_reserved = {}
         if self.repeat_type == 'never':
@@ -1148,35 +1150,59 @@ class IsyTicketingRequests(models.Model):
     @api.onchange('schedule_start_date', 'start_time')
     def onchange_schedule_from_datetime(self):
         if self.key_type == 'transportation' and self.schedule_start_date and self.start_time:
-            start_time_str = '{0:02.0f}:{1:02.0f}'.format(*divmod(float(self.start_time) / 60, 60))
-            date_from = datetime.datetime.strptime(str(self.schedule_start_date) + ' ' + start_time_str + ':00', "%Y-%m-%d %H:%M:%S")
+            #start_time_str = '{0:02.0f}:{1:02.0f}'.format(*divmod(float(self.start_time) / 60, 60))
+            if self.start_time:
+                try:
+                    start_time = float(self.start_time)  # Ensure it's a float
+                    hours = int(start_time)  # Extract the hour part
+                    minutes = int((start_time - hours) * 60)  # Convert the decimal part to minutes
+                    start_time_str = '{:02}:{:02}'.format(hours, minutes)
+                except ValueError:
+                    start_time_str = "00:00"  # Default value in case of invalid format
+            else:
+                start_time_str = "00:00"  # Default value in case of invalid format
+            # start_time_str = f"{float(self.start_time):02}:00"
+            #date_from = datetime.datetime.strptime(str(self.schedule_start_date) + ' ' + start_time_str + ':00', "%Y-%m-%d %H:%M:%S")
+            date_from = datetime.datetime.strptime(f"{self.schedule_start_date} {start_time_str}:00", "%Y-%m-%d %H:%M:%S")
             self.date_from = date_from - timedelta(hours=6, minutes=30)
 
     @api.onchange('schedule_end_date', 'end_time')
     def onchange_schedule_to_datetime(self):
         if self.key_type == 'transportation' and self.schedule_end_date and self.end_time:
-            end_time_str = '{0:02.0f}:{1:02.0f}'.format(*divmod(float(self.end_time) / 60, 60))
-            date_to = datetime.datetime.strptime(str(self.schedule_end_date) + ' ' + end_time_str + ':00', "%Y-%m-%d %H:%M:%S")
+            #end_time_str = '{0:02.0f}:{1:02.0f}'.format(*divmod(float(self.end_time) / 60, 60))
+            if self.end_time:
+                try:
+                    end_time = float(self.end_time)  # Ensure it's a float
+                    hours = int(end_time)  # Extract the hour part
+                    minutes = int((end_time - hours) * 60)  # Convert the decimal part to minutes
+                    end_time_str = '{:02}:{:02}'.format(hours, minutes)
+                except ValueError:
+                    end_time_str = "00:00"  # Default value in case of invalid format
+            else:
+                end_time_str = "00:00"  # Default value in case of invalid format
+            #end_time_str = f"{float(self.end_time):02}:00"
+            #date_to = datetime.datetime.strptime(str(self.schedule_end_date) + ' ' + end_time_str + ':00', "%Y-%m-%d %H:%M:%S")
+            date_to = datetime.datetime.strptime(f"{self.schedule_end_date} {end_time_str}:00", "%Y-%m-%d %H:%M:%S")
             self.date_to = date_to - timedelta(hours=6, minutes=30)
 
-    # @api.onchange('date_from', 'date_to')
-    # def check_availability(self):
-    #     if self.date_from and self.date_to and self.no_of_passengers:
-    #         self.fleet = ''
-    #         fleet_obj = self.env['fleet.vehicle'].search([])
-    #         for i in fleet_obj:
-    #             for each in i.reserved_time:
-    #                 if each.date_from <= self.date_from <= each.date_to:
-    #                     i.write({'check_availability': False})
-    #                 elif self.date_from < each.date_from:
-    #                     if each.date_from <= self.date_to <= each.date_to:
-    #                         i.write({'check_availability': False})
-    #                     elif self.date_to > each.date_to:
-    #                         i.write({'check_availability': False})
-    #                     else:
-    #                         i.write({'check_availability': True})
-    #                 else:
-    #                     i.write({'check_availability': True})
+    @api.onchange('date_from', 'date_to')
+    def check_availability(self):
+        if self.date_from and self.date_to and self.no_of_passengers:
+            self.fleet = ''
+            fleet_obj = self.env['fleet.vehicle'].search([])
+            for i in fleet_obj:
+                for each in i.reserved_time:
+                    if each.date_from <= self.date_from <= each.date_to:
+                        i.write({'check_availability': False})
+                    elif self.date_from < each.date_from:
+                        if each.date_from <= self.date_to <= each.date_to:
+                            i.write({'check_availability': False})
+                        elif self.date_to > each.date_to:
+                            i.write({'check_availability': False})
+                        else:
+                            i.write({'check_availability': True})
+                    else:
+                        i.write({'check_availability': True})
 
     def fleet_reserved(self,reserved=False):
         fleet_obj = self.fleet
@@ -1216,6 +1242,8 @@ class IsyTicketingRequests(models.Model):
                     self.write({'reserved_fleet_id': reserved_id.id})
         else:
             raise UserError('Sorry This vehicle is already requested by %s from %s to %s.'%(user,e_df,e_dt))
+
+
 
     def driver_reserved(self):
         driver_obj = self.driver_id

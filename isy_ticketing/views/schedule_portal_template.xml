@@ -1,7 +1,7 @@
 <odoo>
     <data>
 
-        <template id="schedule_requests" name="Portal layout : maintenance menu entries" inherit_id="portal.portal_breadcrumbs" priority="20">
+        <template id="schedule_requests" name="Portal layout : maintenance menu entries" inherit_id="portal.portal_breadcrumbs" priority="70">
             <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
                 <li t-if="page_name == 'schedule_request' or schedule_request" t-attf-class="breadcrumb-item #{'active ' if not schedule_request else ''}">
                     <a t-if="schedule_requests" t-attf-href="/my/schedule_requests?{{ keep_query() }}">Schedule Requests</a>

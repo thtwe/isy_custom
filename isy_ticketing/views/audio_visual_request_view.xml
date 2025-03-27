@@ -42,9 +42,9 @@
                             <field name="subject" required='1' readonly="state == 'done'"/>
                             <field name="event_date" required="1"/>
                             <label for="start_time" string="Start Time"></label>
-                            <div><field name="start_time" required="1" widget="float_full_time" options="{'round_off': True}" class="oe_inline"/><span style='color:#9e9ead' class="oe_edit_only"> [ HH:MM:SS and 24 hrs format ]</span></div>
+                            <div><field name="start_time" required="1" widget="float_time" options="{'round_off': True}" class="oe_inline"/><span style='color:#9e9ead' class="oe_edit_only"> [ HH:MM:SS and 24 hrs format ]</span></div>
                             <label for="end_time" string="End Time"></label>
-                            <div><field name="end_time" required="1" widget="float_full_time" options="{'round_off': True}" class="oe_inline"/><span style='color:#9e9ead' class="oe_edit_only"> [ HH:MM:SS and 24 hrs format ]</span></div>
+                            <div><field name="end_time" required="1" widget="float_time" options="{'round_off': True}" class="oe_inline"/><span style='color:#9e9ead' class="oe_edit_only"> [ HH:MM:SS and 24 hrs format ]</span></div>
                             <field name="location_id" required="1"/>
                             <field name="mic_qty"/>
                             <field name="projector_qty"/>
@@ -54,7 +54,7 @@
                             <field name="assign_person"/>
                             <field name="approver_id"/>
                             
-                            
+
                         </group>
                         <notebook>
                             <page string="Note">

@@ -9,7 +9,7 @@
             </a>
         </template>
 
-        <template id="portal_stationary_requests" name="Stationary Request Portal" inherit_id="portal.portal_my_home" priority="40">
+        <template id="portal_stationary_requests" name="Stationary Request Portal" inherit_id="portal.portal_my_home" priority="90">
             <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
                 <t t-call="isy_ticketing.portal_docs_entry">
                     <t t-set="title">Stationery Requests</t>

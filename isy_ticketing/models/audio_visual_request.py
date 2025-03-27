@@ -21,8 +21,8 @@ class ISYTAudioVisualRequest(models.Model):
     state = fields.Selection([('draft', 'Draft'), ('request_for_approval', 'Waiting for Approval'), ('approved', 'Approved'), ('rejected', 'Rejected'), ('done', 'Done'), ('cancelled', 'Cancelled')], string="State", default='draft', tracking=True)
     request_date = fields.Date(string='Request Date', default=fields.Date.today)
     event_date = fields.Date(string='Event Date')
-    start_time = fields.Float(string='Start Time', default=0.000)
-    end_time = fields.Float(string='End Time', default=0.000)
+    start_time = fields.Float(string='Start Time', compute="_compute_start_time", inverse="_inverse_start_time", default=0.000)
+    end_time = fields.Float(string='End Time', compute="_compute_start_time", inverse="_inverse_start_time", default=0.000)
     mic_qty = fields.Integer(String="Microphone Qty")
     projector_qty = fields.Integer(String="Projector Qty")
     location_id = fields.Many2one('stock.location', string='Resource/Location', domain=[('usage','=','internal'),('location_id','!=',False)])
@@ -30,16 +30,47 @@ class ISYTAudioVisualRequest(models.Model):
     cancellation_reason = fields.Char(string='Cancellation Reason')
     approver_id = fields.Many2one('res.users', string="Appprover", readonly=True)
     key_type = fields.Selection([('audio', 'Audio / Visual Requests')], default='audio')
-    #date_start_toshow = fields.Datetime(string='Start Time (To Show)',compute='compute_date',store=True)
-    #date_end_toshow = fields.Datetime(string='End Time (To Show)',compute='compute_date',store=True)
+    start_time_seconds = fields.Integer(string="Start Time (Seconds)", help="Stored in total seconds")
+    end_time_seconds = fields.Integer(string="End Time (Seconds)", help="Stored in total seconds")
 
+    @api.depends('start_time_seconds')
+    def _compute_start_time(self):
+        """Convert stored total seconds to decimal hours for UI."""
+        for record in self:
+            record.start_time = record.start_time_seconds / 3600 if record.start_time_seconds else 0.0
+
+    def _inverse_start_time(self):
+        """Convert decimal hours to total seconds before saving."""
+        for record in self:
+            record.start_time_seconds = int(record.start_time * 3600)
+
+    @api.depends('end_time_seconds')
+    def _compute_end_time(self):
+        """Convert stored total seconds to decimal hours for UI."""
+        for record in self:
+            record.end_time = record.end_time_seconds / 3600 if record.end_time_seconds else 0.0
+
+    def _inverse_end_time(self):
+        """Convert decimal hours to total seconds before saving."""
+        for record in self:
+            record.end_time_seconds = int(record.end_time * 3600)
+
+    # @api.model
+    # def seconds_to_time(self, seconds):
+    #     """Convert seconds to HH:MM:SS format."""
+    #     hours = int(seconds // 3600)
+    #     minutes = int((seconds % 3600) // 60)
+    #     seconds = int(seconds % 60)
+    #     return '%02d:%02d:%02d' % (hours, minutes, seconds)
 
     @api.model
-    def seconds_to_time(self, seconds):
-        """Convert seconds to HH:MM:SS format."""
-        hours = int(seconds // 3600)
-        minutes = int((seconds % 3600) // 60)
-        seconds = int(seconds % 60)
+    def seconds_to_time(self, time_float):
+        """Convert time in float (hours) to HH:MM:SS format."""
+        # Convert float hours to total seconds
+        total_seconds = int(time_float * 3600)  # Time in seconds
+        hours = total_seconds // 3600
+        minutes = (total_seconds % 3600) // 60
+        seconds = total_seconds % 60
         return '%02d:%02d:%02d' % (hours, minutes, seconds)
 
     def get_start_time_str(self):

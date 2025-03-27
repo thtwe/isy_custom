@@ -2,7 +2,7 @@
     <data>
         <!-- Complete page of the maintenance Request -->
 
-        <template id="audio_requests" name="Portal layout : audio menu entries" inherit_id="portal.portal_breadcrumbs" priority="50">
+        <template id="audio_requests" name="Portal layout : audio menu entries" inherit_id="portal.portal_breadcrumbs" priority="20">
             <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
                 <li t-if="page_name == 'audio_request' or audio_request" t-attf-class="breadcrumb-item #{'active ' if not audio_request else ''}">
                     <a t-if="audio_requests" t-attf-href="/my/audio_requests?{{ keep_query() }}">Audio / Visual Requests</a>

@@ -2,7 +2,7 @@
     <data>
         <!-- Complete page of the maintenance Request -->
 
-        <template id="technology_requests" name="Portal layout : technology menu entries" inherit_id="portal.portal_breadcrumbs" priority="20">
+        <template id="technology_requests" name="Portal layout : technology menu entries" inherit_id="portal.portal_breadcrumbs" priority="100">
             <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
                 <li t-if="page_name == 'technology_request' or technology_request" t-attf-class="breadcrumb-item #{'active ' if not technology_request else ''}">
                     <a t-if="technology_requests" t-attf-href="/my/technology_requests?{{ keep_query() }}">Technology Requests</a>
@@ -14,7 +14,7 @@
             </xpath>
         </template>
 
-        <template id="portal_technology_requests" name="Technology Request Portal" inherit_id="portal.portal_my_home" priority="40">
+        <template id="portal_technology_requests" name="Technology Request Portal" inherit_id="portal.portal_my_home" priority="100">
             <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
                 <t t-if="request.env.user.portal_technology_request or request.env.user.portal_technology_request_user" t-call="isy_ticketing.portal_docs_entry">
                     <t t-set="title">Technology Requests</t>
